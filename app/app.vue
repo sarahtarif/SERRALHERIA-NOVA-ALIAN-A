@@ -7,10 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from '@vercel/analytics'
-
-inject()
-
 useHead({
   htmlAttrs: { lang: 'pt-BR' },
   titleTemplate: '%s | Serralheria Nova Aliança',
