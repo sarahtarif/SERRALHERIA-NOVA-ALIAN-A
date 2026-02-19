@@ -37,13 +37,26 @@
           class="group cursor-pointer overflow-hidden"
         >
           <div class="relative aspect-video bg-secondary-100 overflow-hidden">
+            <!-- Vídeo para itens com vídeo -->
+            <video
+              v-if="item.video"
+              class="w-full h-full object-cover"
+              autoplay
+              loop
+              muted
+              playsinline
+            >
+              <source :src="item.video" type="video/mp4">
+            </video>
+            <!-- Skeleton para outros itens -->
+            <Skeleton v-else class="w-full h-full" />
+            
             <div class="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-90 transition-opacity duration-300 flex items-center justify-center">
               <div class="text-white text-center p-6">
                 <h3 class="text-xl font-bold mb-2">{{ item.title }}</h3>
                 <p class="text-sm text-primary-100">{{ item.description }}</p>
               </div>
             </div>
-            <Skeleton class="w-full h-full" />
           </div>
           <CardContent class="pt-4">
             <div class="flex items-center justify-between">
@@ -91,37 +104,43 @@ const galleryItems = [
     title: 'Automação Portão Basculante',
     description: 'Motor PPA com fotocélula e controle remoto',
     category: 'automacao',
-    location: 'Vila Mariana'
+    location: 'Vila Mariana',
+    video: null
   },
   {
     title: 'Portão Deslizante Industrial',
     description: 'Portão de 6 metros com automação completa',
     category: 'portoes',
-    location: 'Santo Amaro'
+    location: 'Santo Amaro',
+    video: '/portao_6metros.mp4'
   },
   {
     title: 'Sistema de Travas Eletrônicas',
     description: 'Instalação de travas de segurança',
     category: 'travas',
-    location: 'Moema'
+    location: 'Moema',
+    video: null
   },
   {
     title: 'Câmeras de Segurança',
     description: 'Sistema com 8 câmeras e acesso via app',
     category: 'cameras',
-    location: 'Pinheiros'
+    location: 'Pinheiros',
+    video: null
   },
   {
     title: 'Vídeo Porteiro Intelbras',
     description: 'Instalação completa com interfone',
     category: 'interfones',
-    location: 'Itaim Bibi'
+    location: 'Itaim Bibi',
+    video: '/interfones.mp4'
   },
   {
     title: 'Manutenção Preventiva',
     description: 'Revisão completa de motor e sensores',
     category: 'automacao',
-    location: 'Jardins'
+    location: 'Jardins',
+    video: '/manutencao_preventiva.mp4'
   }
 ]
 
