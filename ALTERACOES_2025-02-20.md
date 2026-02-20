@@ -965,9 +965,10 @@ Diminuir a altura do Navbar em 0,8cm para um design mais compacto.
 5. `ffc734f` - "2025-02-20 11:30 - Otimizar Hero para conversão com H1 local, CTAs hierarquizados e WhatsApp guiado"
 6. `e740371` - "2025-02-20 15:21 - Melhorar legibilidade Hero, navbar transparente, ajustes de logo e corrigir erro sintaxe"
 7. `60416a7` - "2025-02-20 15:45 - Ajustes finais: Hero centralizado, navbar transparente h-20, logo no footer e telefone atualizado"
+8. `141dfde` - "2025-02-20 16:15 - Otimizações mobile Hero e Navbar: mini features, menu usável, contraste melhorado"
 
-**Commit Final**: 60416a7
-**Status**: ✅ Concluído e pronto para deploy
+**Commit Final**: 141dfde
+**Status**: ✅ Concluído e em produção
 
 ---
 
@@ -1018,3 +1019,84 @@ Diminuir a altura do Navbar em 0,8cm para um design mais compacto.
 **Última Atualização**: 20/02/2025 - 15:45
 **Commit**: 60416a7
 **Status**: ✅ Todas as alterações concluídas e commitadas
+
+---
+
+## 28. Otimizações Mobile Hero e Navbar (Commit 141dfde - 16:15)
+
+### Objetivo
+Melhorar usabilidade mobile e conversão com mini features visíveis, menu mais acessível e melhor contraste.
+
+### Melhorias Implementadas:
+
+#### 1. Mini Features Mobile no Hero
+**Localização**: Logo abaixo do microcopy "Resposta rápida pelo WhatsApp • Orçamento sem compromisso"
+
+**Implementação**:
+- Três ícones lado a lado: Anti-Esmagamento, Proteção Contra Surtos, Garantia
+- Ícones pequenos (w-4 h-4) com texto tiny (text-[10px])
+- Cor accent-400 para destaque
+- Espaçamento adequado (gap-4)
+- Visível apenas no mobile
+
+**Benefícios**:
+- Reforça benefícios principais logo após CTA
+- Aumenta confiança do usuário
+- Não ocupa muito espaço vertical
+
+#### 2. Remoção de Animações Desktop
+**Problema**: Animações fade-in-up estavam aplicadas nos cards de features que só aparecem no desktop
+
+**Solução**:
+- Removidas classes `animate-fade-in-up` e `animation-delay`
+- Removido CSS de keyframes `@keyframes fade-in-up`
+- Mantidos efeitos de hover (scale, shadow)
+
+**Justificativa**: Usuário pediu "apenas pra telas mobiles" mas os cards só aparecem no desktop
+
+#### 3. Menu Mobile com Melhor Usabilidade
+**Áreas de Toque Maiores**:
+- Links com `py-3.5` (~56px de altura)
+- Atende diretrizes de acessibilidade (mínimo 48px)
+- Hover com `hover:bg-white/5` para feedback visual
+- Padding horizontal `px-2` para área clicável maior
+
+**Botão de Orçamento Fixo no Rodapé**:
+- Container com `min-h-[50vh]` para altura mínima
+- Estrutura flex em coluna
+- Botão com `mt-auto` (sempre no final)
+- Botão centralizado `w-full h-12`
+- Nunca some mesmo em telas altas
+
+#### 4. Melhor Contraste no Navbar
+**Botão de Orçamento Desktop**:
+- Borda clara: `border-2 border-accent-300`
+- Sombra forte: `shadow-lg shadow-accent-500/50`
+- Destaca do fundo azul
+
+**Botão de Orçamento Mobile**:
+- Mesmas melhorias de contraste
+- Sempre visível no rodapé do menu
+
+**Transparência Ajustada**:
+- Navbar com `bg-primary-900/95` (95% opacidade)
+- Mais opaco para melhor legibilidade
+- Mantém efeito glassmorphism
+
+### Impacto Esperado
+- ✅ Maior taxa de conversão com features visíveis no mobile
+- ✅ Menu mobile muito mais fácil de usar
+- ✅ Botão de orçamento sempre acessível
+- ✅ Melhor contraste visual em todos os CTAs
+- ✅ Experiência mobile otimizada
+
+### Arquivos Modificados:
+- `app/components/Hero.vue` (mini features mobile, remoção de animações)
+- `app/components/Navbar.vue` (usabilidade mobile, contraste, transparência)
+- `ALTERACOES_2025-02-20.md` (documentação)
+
+---
+
+**Última Atualização**: 20/02/2025 - 16:15
+**Commit**: 141dfde
+**Status**: ✅ Otimizações mobile concluídas e em produção

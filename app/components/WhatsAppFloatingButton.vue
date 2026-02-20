@@ -18,8 +18,16 @@
 <script setup lang="ts">
 const { sendMessage, createServiceMessage } = useWhatsApp()
 
+// Prop para mensagem customizada (opcional)
+const props = defineProps<{
+  customMessage?: string
+}>()
+
+// Inject mensagem customizada da página (se houver)
+const injectedMessage = inject<string>('whatsappMessage', '')
+
 const openWhatsApp = () => {
-  const message = createServiceMessage({
+  const message = injectedMessage || props.customMessage || createServiceMessage({
     service: 'Gostaria de mais informações sobre os serviços'
   })
   sendMessage(message)

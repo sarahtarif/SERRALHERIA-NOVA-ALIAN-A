@@ -19,35 +19,54 @@
           <!-- Conteúdo -->
           <div>
             <Badge variant="default" class="mb-4">{{ service.category }}</Badge>
-            <h1 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-text-primary mb-6">
               {{ service.title }}
             </h1>
-            <p class="text-xl text-text-secondary mb-8 leading-relaxed">
-              {{ service.description }}
+            
+            <!-- CTA Principal no Topo -->
+            <div class="mb-8 p-6 bg-success-50 border-2 border-success-200 rounded-xl">
+              <button 
+                @click="handleWhatsApp"
+                class="w-full bg-success-500 hover:bg-success-600 active:bg-success-700 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl mb-3"
+              >
+                <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                <span class="text-lg">Pedir Orçamento de {{ service.title }} no WhatsApp</span>
+              </button>
+              <p class="text-sm text-success-700 text-center font-medium">
+                ✓ Resposta rápida • Orçamento sem compromisso
+              </p>
+            </div>
+
+            <p class="text-base md:text-lg text-text-secondary mb-8 leading-relaxed">
+              <span class="font-bold text-text-primary">{{ getShortDescription(service.slug) }}</span>
             </p>
 
             <!-- Características -->
             <div class="mb-8">
-              <h2 class="text-2xl font-bold text-text-primary mb-4">Características</h2>
+              <h2 class="text-xl md:text-2xl font-bold text-text-primary mb-4">Características</h2>
               <ul class="space-y-3">
                 <li v-for="(feature, index) in service.features" :key="index" class="flex items-start space-x-3">
-                  <svg class="w-6 h-6 text-success-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 md:w-6 md:h-6 text-success-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  <span class="text-text-primary">{{ feature }}</span>
+                  <span class="text-sm md:text-base text-text-primary">{{ feature }}</span>
                 </li>
               </ul>
             </div>
 
             <!-- Benefícios -->
             <div class="mb-8">
-              <h2 class="text-2xl font-bold text-text-primary mb-4">Benefícios</h2>
+              <h2 class="text-xl md:text-2xl font-bold text-text-primary mb-4">Benefícios</h2>
               <ul class="space-y-3">
                 <li v-for="(benefit, index) in service.benefits" :key="index" class="flex items-start space-x-3">
-                  <svg class="w-6 h-6 text-primary-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  <span class="text-text-primary">{{ benefit }}</span>
+                  <span class="text-sm md:text-base text-text-primary">
+                    <span class="font-bold">{{ getBenefitHighlight(benefit) }}</span>{{ getBenefitRest(benefit) }}
+                  </span>
                 </li>
               </ul>
             </div>
@@ -62,13 +81,34 @@
           <!-- CTA Card -->
           <div>
             <Card class="sticky top-24">
-              <CardContent class="p-8">
-                <h3 class="text-2xl font-bold text-text-primary mb-4">
-                  Solicite um Orçamento
+              <CardContent class="p-6 md:p-8">
+                <h3 class="text-xl md:text-2xl font-bold text-text-primary mb-3">
+                  Solicite um Orçamento de {{ service.title }}
                 </h3>
-                <p class="text-text-secondary mb-6">
-                  Preencha o formulário e receba uma proposta personalizada via WhatsApp
+                <p class="text-sm md:text-base text-text-secondary mb-4">
+                  Preencha os dados e receba a proposta também pelo WhatsApp
                 </p>
+                
+                <!-- Botão WhatsApp Rápido -->
+                <button 
+                  @click="handleWhatsApp"
+                  class="w-full bg-success-500 hover:bg-success-600 text-white font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 mb-4 md:hidden"
+                >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  <span class="text-sm">Falar direto pelo WhatsApp</span>
+                </button>
+                
+                <div class="relative mb-4 md:hidden">
+                  <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-border"></div>
+                  </div>
+                  <div class="relative flex justify-center text-xs">
+                    <span class="bg-white px-2 text-text-secondary">ou preencha o formulário</span>
+                  </div>
+                </div>
+                
                 <LeadForm :service="service.title" />
               </CardContent>
             </Card>
@@ -114,6 +154,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = route.params.slug as string
+const { sendMessage } = useWhatsApp()
 
 // Dados dos serviços
 const services = {
@@ -233,6 +274,57 @@ const services = {
 }
 
 const service = services[slug as keyof typeof services] || null
+
+// Mensagem customizada para o floating WhatsApp button
+const floatingMessage = computed(() => {
+  if (!service) return ''
+  return `Olá! Encontrei o serviço de ${service.title} no site e quero um orçamento.\n\n📍 Bairro: \n⏰ Melhor horário: `
+})
+
+// Provide mensagem para o floating button
+provide('whatsappMessage', floatingMessage.value)
+
+// Função para enviar mensagem WhatsApp personalizada
+const handleWhatsApp = () => {
+  if (!service) return
+  
+  const messages: Record<string, string> = {
+    'automacao-portoes': 'Olá! Quero orçamento de Automação de Portão.\n\n📍 Bairro: \n🚪 Tipo de portão (basculante/deslizante/pivotante): \n⏰ Melhor horário: ',
+    'cameras-seguranca': 'Olá! Quero orçamento de Câmeras de Segurança.\n\n📍 Bairro: \n📹 Quantas câmeras: \n🏠 Tipo de imóvel (casa/apto/comércio): ',
+    'interfones': 'Olá! Quero orçamento de Interfone/Vídeo Porteiro.\n\n📍 Bairro: \n🏠 Tipo de imóvel: \n📱 Precisa de app: ',
+    'fotocelula': 'Olá! Quero orçamento de Fotocélula Anti-Esmagamento.\n\n📍 Bairro: \n🚪 Tipo de portão: \n⏰ Melhor horário: ',
+    'travas-eletronicas': 'Olá! Quero orçamento de Trava Eletrônica.\n\n📍 Bairro: \n🚪 Tipo de portão: \n⏰ Melhor horário: ',
+    'manutencao': 'Olá! Quero orçamento de Manutenção Preventiva.\n\n📍 Bairro: \n🚪 Tipo de equipamento: \n⚠️ Problema: '
+  }
+  
+  const message = messages[slug] || `Olá! Quero orçamento de ${service.title}.\n\n📍 Bairro: \n⏰ Melhor horário: `
+  sendMessage(message)
+}
+
+// Descrições curtas focadas em resultado
+const getShortDescription = (serviceSlug: string): string => {
+  const descriptions: Record<string, string> = {
+    'automacao-portoes': 'Instalação profissional de motores para portões com as melhores marcas. Mais comodidade e segurança no seu dia a dia.',
+    'cameras-seguranca': 'Monitoramento 24h pelo celular com câmeras de alta definição. Proteja sua família e patrimônio de qualquer lugar.',
+    'interfones': 'Veja e fale com visitantes antes de abrir. Sistema Intelbras com vídeo, áudio e abertura remota.',
+    'fotocelula': 'Sensor de segurança que impede acidentes. Detecta pessoas e objetos, interrompendo o portão automaticamente.',
+    'travas-eletronicas': 'Proteção extra contra invasões. Trava eletrônica de alta resistência com acionamento remoto.',
+    'manutencao': 'Evite paradas e consertos caros. Manutenção preventiva aumenta a vida útil e garante segurança.'
+  }
+  return descriptions[serviceSlug] || service?.description || ''
+}
+
+// Extrair highlight do benefício (primeira parte até vírgula ou ponto)
+const getBenefitHighlight = (benefit: string): string => {
+  const match = benefit.match(/^([^,\.]+)[,\.]/)
+  return match ? match[1] : benefit.split(' ').slice(0, 3).join(' ')
+}
+
+// Extrair resto do benefício
+const getBenefitRest = (benefit: string): string => {
+  const match = benefit.match(/^([^,\.]+)([,\.].*)/)
+  return match ? match[2] : ''
+}
 
 const relatedServices = Object.values(services)
   .filter(s => s.slug !== slug)

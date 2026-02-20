@@ -6,7 +6,7 @@
     <!-- Maximum overlay for best contrast -->
     <div class="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-800/99 to-primary-900/98"></div>
 
-    <div class="container mx-auto px-4 pt-6 pb-20 md:py-12 relative z-10">
+    <div class="container mx-auto px-4 pt-6 pb-4 md:pb-12 relative z-10">
       <div class="max-w-3xl">
         <!-- Badge - Menor no mobile -->
         <div class="inline-flex items-center space-x-2 bg-accent-500 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-4 md:mb-6 shadow-lg">
@@ -120,7 +120,7 @@
 
     <!-- Wave Divider -->
     <div class="absolute bottom-0 left-0 right-0">
-      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 sm:h-16 md:h-20">
         <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
       </svg>
     </div>
