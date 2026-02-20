@@ -1,13 +1,14 @@
 <template>
-  <nav class="bg-gradient-primary shadow-metal-lg sticky top-0 z-50">
+  <nav class="bg-primary-900/90 backdrop-blur-md shadow-lg border-b border-white/10 sticky top-0 z-50 transition-all">
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-16">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center space-x-3">
           <img 
-            src="/logo.jpg" 
+            src="/logo.png" 
             alt="Nova Aliança Logo" 
-            class="w-12 h-12 rounded-lg object-cover"
+            class="w-28 h-20 rounded-lg object-contain mt-4"
+            style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
           />
           <div class="hidden md:block">
             <div class="text-white font-bold text-xl">Nova Aliança</div>

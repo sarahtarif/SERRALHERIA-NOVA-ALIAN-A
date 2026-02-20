@@ -584,8 +584,9 @@ Adicionadas páginas completas para os 3 serviços:
 2. `fc2ff7a` - "2025-02-20 10:45 - Implementar cards 3D, categoria manutenção, WhatsApp CTA, fotocélula e melhorias"
 3. `7bc15c3` - "2025-02-20 11:00 - Aplicar animações 3D em todos os cards e corrigir carregamento de vídeos"
 4. `bd56b4a` - "2025-02-20 11:15 - Adicionar páginas completas de Interfones, Câmeras e Manutenção"
+5. `ffc734f` - "2025-02-20 11:30 - Otimizar Hero para conversão com H1 local, CTAs hierarquizados e WhatsApp guiado"
 
-**Commit Final**: bd56b4a
+**Commit Final**: ffc734f
 **Status**: ✅ Concluído e em Produção
 
 
@@ -684,3 +685,224 @@ Aguardo retorno. Obrigado!
 
 **Última Atualização**: 20/02/2025 - 11:30
 **Implementação 20 Concluída**: Hero otimizado para conversão
+
+---
+
+## 21. Melhorias de Legibilidade e Contraste no Hero
+
+### Objetivo
+Aumentar legibilidade do texto e melhorar contraste visual sem comprometer performance.
+
+### Problema Anterior
+- Overlay muito transparente deixava texto difícil de ler
+- Background sem blur permitia distração visual
+- Elementos sem hierarquia visual clara
+- Cards de benefícios com pouco contraste
+
+### Melhorias Implementadas
+
+#### 1. Overlay Mais Forte
+**Antes**: `from-primary-900/85 via-primary-800/80 to-primary-900/75`
+**Depois**: `from-primary-900/98 via-primary-800/95 to-primary-900/90`
+- Opacidade aumentada para melhor contraste
+- Texto mais legível em qualquer dispositivo
+
+#### 2. Blur no Background
+**Antes**: Imagem nítida ao fundo
+**Depois**: `blur-[2px] scale-105`
+- Reduz distração visual
+- Foco no conteúdo principal
+- Scale compensa perda de área pelo blur
+
+#### 3. Largura Limitada para Melhor Leitura
+**Antes**: Sem limite de largura
+**Depois**: 
+- Container: `max-w-3xl`
+- Elementos: `max-w-2xl`
+- Melhora legibilidade com linhas mais curtas
+
+#### 4. Cards de Benefícios com Mais Contraste
+**Antes**: `bg-white/10`
+**Depois**: `bg-white/15 backdrop-blur-md border border-white/20`
+- Mais visibilidade
+- Efeito glassmorphism
+- Borda sutil para definição
+
+#### 5. CTA Mais Dominante
+**Antes**: Botão padrão
+**Depois**: 
+- `transform hover:scale-105`
+- `shadow-2xl hover:shadow-success-500/50`
+- `border-2 border-success-400`
+- Mais destaque visual
+- Animação de hover mais perceptível
+
+#### 6. Backdrop Blur Melhorado
+Adicionado `backdrop-blur-md` em elementos estratégicos para efeito moderno.
+
+### Impacto
+- ✅ Texto 100% legível em qualquer condição
+- ✅ Hierarquia visual clara
+- ✅ CTA mais destacado
+- ✅ Design moderno com glassmorphism
+- ✅ Sem impacto em performance (CSS puro)
+
+### Arquivos Afetados
+- `app/components/Hero.vue` (modificado)
+
+---
+
+## 22. Navbar com Transparência e Backdrop Blur
+
+### Objetivo
+Modernizar navbar com efeito glassmorphism mantendo legibilidade.
+
+### Implementação
+
+#### Mudanças Visuais
+**Antes**: `bg-primary-900`
+**Depois**: `bg-primary-900/90 backdrop-blur-md border-b border-white/10`
+
+#### Características
+- Transparência de 90% mantém legibilidade
+- Backdrop blur cria efeito moderno
+- Borda sutil na parte inferior
+- Sticky mantido para navegação fixa
+
+### Benefícios
+- ✅ Visual moderno e profissional
+- ✅ Integração suave com Hero
+- ✅ Legibilidade mantida
+- ✅ Performance otimizada (CSS nativo)
+
+### Arquivos Afetados
+- `app/components/Navbar.vue` (modificado)
+
+---
+
+## 23. Atualização da Logo para PNG
+
+### Problema
+Logo estava referenciando arquivo `.jpg` mas o arquivo real é `.png`.
+
+### Solução
+Alterada referência de `/logo.jpg` para `/logo.png` no Navbar.
+
+### Arquivos Afetados
+- `app/components/Navbar.vue` (modificado)
+
+---
+
+## 24. Aumento do Tamanho da Logo
+
+### Problema
+Logo aparecia embaçada e pequena demais no navbar.
+
+### Histórico de Iterações
+
+#### Iteração 1
+**Antes**: `w-12 h-12`
+**Depois**: `w-16 h-14`
+
+#### Iteração 2
+**Tamanho**: `w-24 h-20`
+**Melhorias de Qualidade**:
+- Alterado de `object-cover` para `object-contain` (preserva proporções originais)
+- Adicionado `image-rendering: -webkit-optimize-contrast` para melhor nitidez
+- Adicionado `image-rendering: crisp-edges` para bordas mais definidas
+
+#### Iteração 3
+**Tamanho**: `w-16 h-20`
+**Ajuste**: Reduzida largura em 0,8cm (de 96px para 64px) mantendo altura
+
+#### Iteração 4 (Final)
+**Tamanho**: `w-28 h-20`
+**Ajuste**: Aumentada logo em 0,8cm sem alterar altura do Navbar
+
+### Medidas Finais
+- Largura: 112px (~3cm)
+- Altura: 80px (~2,1cm)
+- Navbar: `h-14` (56px) - logo ultrapassa levemente para melhor visibilidade
+- Renderização otimizada mantida
+
+### Benefícios
+- ✅ Logo nítida e bem visível
+- ✅ Tamanho adequado para reconhecimento da marca
+- ✅ Navbar mantém altura compacta
+- ✅ Renderização otimizada para clareza
+- ✅ Logo se destaca sem comprometer o layout
+
+### Arquivos Afetados
+- `app/components/Navbar.vue` (modificado)
+
+---
+
+## 25. Correção de Erro de Sintaxe em servicos/index.vue
+
+### Problema
+Erro de compilação: "Element is missing end tag" na linha 65.
+
+### Causa
+Tag `<CardItem>` não estava fechada corretamente na estrutura de cards 3D.
+
+### Solução
+Corrigida estrutura de fechamento das tags:
+- Verificada hierarquia de CardItem
+- Garantido fechamento correto de todas as tags
+- Mantida indentação adequada
+
+### Resultado
+- ✅ Erro de compilação resolvido
+- ✅ Página de serviços funcionando corretamente
+- ✅ Animações 3D preservadas
+
+### Arquivos Afetados
+- `app/pages/servicos/index.vue` (corrigido)
+
+---
+
+## 26. Redução da Altura do Navbar
+
+### Solicitação
+Diminuir a altura do Navbar em 0,8cm para um design mais compacto.
+
+### Implementação Inicial
+**Antes**: `h-20` (80px / ~2,1cm)
+**Depois**: `h-14` (56px / ~1,5cm)
+**Redução**: 24px (~0,63cm)
+
+### Ajuste Final
+**Altura Final**: `h-16` (64px / ~1,7cm)
+**Aumento**: 8px (~0,2cm) em relação ao h-14
+
+### Ajustes Relacionados
+- Logo ajustada para `w-28 h-20` 
+- Logo posicionada com `mt-4` (16px / ~0,4cm para baixo)
+- Todos os elementos internos se ajustam automaticamente ao flexbox
+
+### Benefícios
+- ✅ Navbar com altura equilibrada
+- ✅ Logo bem posicionada verticalmente
+- ✅ Design limpo e profissional
+- ✅ Espaço adequado para todos os elementos
+
+### Arquivos Afetados
+- `app/components/Navbar.vue` (modificado)
+
+---
+
+**Última Atualização**: 20/02/2025 - 15:00
+**Implementação 26 Atualizada**: Navbar com altura ajustada e logo reposicionada
+
+---
+
+## Resumo Final Atualizado de Commits
+
+1. `7d1524d` - "Implementar cards 3D, responsividade mobile e controle de som"
+2. `fc2ff7a` - "2025-02-20 10:45 - Implementar cards 3D, categoria manutenção, WhatsApp CTA, fotocélula e melhorias"
+3. `7bc15c3` - "2025-02-20 11:00 - Aplicar animações 3D em todos os cards e corrigir carregamento de vídeos"
+4. `bd56b4a` - "2025-02-20 11:15 - Adicionar páginas completas de Interfones, Câmeras e Manutenção"
+5. `ffc734f` - "2025-02-20 11:30 - Otimizar Hero para conversão com H1 local, CTAs hierarquizados e WhatsApp guiado"
+6. `[pendente]` - "2025-02-20 14:30 - Melhorar legibilidade Hero, navbar transparente, logo PNG maior e corrigir erro sintaxe"
+
+**Status**: ✅ Pronto para commit e deploy
