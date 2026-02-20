@@ -6,7 +6,7 @@
     <!-- Stronger Dark Overlay for better contrast -->
     <div class="absolute inset-0 bg-gradient-to-br from-primary-900/98 via-primary-800/95 to-primary-900/90"></div>
 
-    <div class="container mx-auto px-4 py-20 md:py-32 relative z-10">
+    <div class="container mx-auto px-4 py-8 md:py-12 relative z-10">
       <div class="max-w-3xl">
         <!-- Badge -->
         <div class="inline-flex items-center space-x-2 bg-accent-500 text-white px-4 py-2 rounded-full mb-6 shadow-lg">

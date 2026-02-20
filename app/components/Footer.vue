@@ -4,15 +4,18 @@
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <!-- Sobre -->
         <div>
-          <div class="flex items-center space-x-3 mb-4">
-            <div class="w-10 h-10 bg-accent-500 rounded-lg flex items-center justify-center">
-              <span class="text-white font-bold">NA</span>
-            </div>
+          <NuxtLink to="/" class="flex items-center space-x-3 mb-4">
+            <img 
+              src="/logo.png" 
+              alt="Nova Aliança Logo" 
+              class="w-12 h-12 rounded-lg object-contain"
+              style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
+            />
             <div>
               <div class="font-bold text-lg">Nova Aliança</div>
               <div class="text-secondary-300 text-xs">Serralheria & Automação</div>
             </div>
-          </div>
+          </NuxtLink>
           <p class="text-secondary-300 text-sm">
             +15 anos de experiência em automação de portões, serralheria e segurança eletrônica em São Paulo.
           </p>
@@ -51,7 +54,9 @@
               <svg class="w-5 h-5 text-accent-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <span class="text-secondary-300">(11) 99999-9999</span>
+              <a href="tel:+5511987115613" class="text-secondary-300 hover:text-accent-400 transition-colors">
+                +55 11 98711-5613
+              </a>
             </li>
             <li class="flex items-start space-x-2">
               <svg class="w-5 h-5 text-accent-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
