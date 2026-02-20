@@ -64,7 +64,7 @@ const selectedCategory = ref('todos')
 const categories = [
   { label: 'Todos', value: 'todos' },
   { label: 'Portões', value: 'portoes' },
-  { label: 'Automação', value: 'automacao' },
+  { label: 'Protetores de Rede', value: 'automacao' },
   { label: 'Travas', value: 'travas' },
   { label: 'Câmeras', value: 'cameras' },
   { label: 'Interfones', value: 'interfones' },
@@ -78,7 +78,7 @@ const galleryItems: GalleryCardItem[] = [
     category: 'automacao',
     location: 'Vila Mariana',
     video: null,
-    image: '/protetor_rede.png',
+    image: '/protetor_rede.jpg',
     isNew: false
   },
   {

@@ -69,6 +69,18 @@ const categoryVariant = computed(() => {
   }
   return variants[props.item.category] || 'default'
 })
+
+const categoryLabel = computed(() => {
+  const labels: Record<string, string> = {
+    automacao: 'Protetores de Rede',
+    portoes: 'Portões',
+    travas: 'Travas',
+    cameras: 'Câmeras',
+    interfones: 'Interfones',
+    manutencao: 'Manutenção'
+  }
+  return labels[props.item.category] || props.item.category
+})
 </script>
 
 <template>
@@ -171,7 +183,7 @@ const categoryVariant = computed(() => {
               <div class="flex items-center justify-between w-full">
                 <div class="flex items-center gap-2">
                   <Badge :variant="categoryVariant">
-                    {{ item.category }}
+                    {{ categoryLabel }}
                   </Badge>
                   <Badge v-if="item.isNew" variant="danger" class="animate-pulse">
                     NOVIDADE
