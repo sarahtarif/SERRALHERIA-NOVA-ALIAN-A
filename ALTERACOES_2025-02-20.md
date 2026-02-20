@@ -963,6 +963,58 @@ Diminuir a altura do Navbar em 0,8cm para um design mais compacto.
 3. `7bc15c3` - "2025-02-20 11:00 - Aplicar animações 3D em todos os cards e corrigir carregamento de vídeos"
 4. `bd56b4a` - "2025-02-20 11:15 - Adicionar páginas completas de Interfones, Câmeras e Manutenção"
 5. `ffc734f` - "2025-02-20 11:30 - Otimizar Hero para conversão com H1 local, CTAs hierarquizados e WhatsApp guiado"
-6. `[pendente]` - "2025-02-20 14:30 - Melhorar legibilidade Hero, navbar transparente, logo PNG maior e corrigir erro sintaxe"
+6. `e740371` - "2025-02-20 15:21 - Melhorar legibilidade Hero, navbar transparente, ajustes de logo e corrigir erro sintaxe"
+7. `60416a7` - "2025-02-20 15:45 - Ajustes finais: Hero centralizado, navbar transparente h-20, logo no footer e telefone atualizado"
 
-**Status**: ✅ Pronto para commit e deploy
+**Commit Final**: 60416a7
+**Status**: ✅ Concluído e pronto para deploy
+
+---
+
+## 27. Ajustes Finais de UI/UX (Commit 60416a7 - 15:45)
+
+### Melhorias Implementadas:
+
+#### 1. Hero Centralizado
+- Padding reduzido: `py-8 md:py-12` (antes era `py-20 md:py-32`)
+- Conteúdo mais próximo ao topo
+- Melhor aproveitamento do espaço "acima da dobra"
+- Usuário vê conteúdo principal imediatamente
+
+#### 2. Navbar com Altura Ajustada
+- Altura aumentada: `h-20` (80px / ~2,1cm)
+- Background mais transparente: `bg-primary-900/70` (antes 90%)
+- Logo centralizada verticalmente sem margem adicional
+- Elementos perfeitamente alinhados no centro
+
+#### 3. Logo no Footer
+- Substituído placeholder "NA" por logo real `/logo.png`
+- Tamanho: `w-12 h-12` (48px x 48px)
+- Renderização otimizada com `object-contain`
+- Link clicável para home
+- Consistência visual com navbar
+
+#### 4. Telefone Atualizado no Footer
+- Número real: `+55 11 98711-5613`
+- Link clicável: `tel:+5511987115613`
+- Hover effect para melhor UX
+- Permite ligar diretamente ao clicar
+
+### Benefícios
+- ✅ Hero mais visível e impactante
+- ✅ Navbar com melhor proporção e transparência
+- ✅ Footer profissional com logo real
+- ✅ Contato funcional e acessível
+- ✅ Experiência de usuário otimizada
+
+### Arquivos Modificados:
+- `app/components/Hero.vue` (padding reduzido)
+- `app/components/Navbar.vue` (altura h-20, transparência 70%, logo centralizada)
+- `app/components/Footer.vue` (logo adicionada, telefone atualizado)
+- `ALTERACOES_2025-02-20.md` (documentação)
+
+---
+
+**Última Atualização**: 20/02/2025 - 15:45
+**Commit**: 60416a7
+**Status**: ✅ Todas as alterações concluídas e commitadas

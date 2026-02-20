@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-primary-900/70 backdrop-blur-md shadow-lg border-b border-white/10 sticky top-0 z-50 transition-all">
+  <nav class="bg-primary-900/95 backdrop-blur-md shadow-lg border-b border-white/10 sticky top-0 z-50 transition-all">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-20">
         <!-- Logo -->
@@ -39,7 +39,7 @@
           
           <Button 
             @click="handleCTA"
-            class="bg-accent-500 hover:bg-accent-600 text-white shadow-accent"
+            class="bg-accent-500 hover:bg-accent-600 text-white shadow-lg shadow-accent-500/50 border-2 border-accent-300"
           >
             Solicitar Orçamento
           </Button>
@@ -59,34 +59,38 @@
 
       <!-- Mobile Menu -->
       <div v-if="mobileMenuOpen" class="lg:hidden pb-4">
-        <div class="flex flex-col space-y-3">
-          <NuxtLink 
-            v-for="item in menuItems" 
-            :key="item.path"
-            :to="item.path"
-            @click="mobileMenuOpen = false"
-            class="text-white hover:text-accent-300 transition-colors font-medium py-2"
-          >
-            {{ item.label }}
-          </NuxtLink>
+        <div class="flex flex-col min-h-[50vh]">
+          <div class="flex flex-col">
+            <NuxtLink 
+              v-for="item in menuItems" 
+              :key="item.path"
+              :to="item.path"
+              @click="mobileMenuOpen = false"
+              class="text-white hover:text-accent-300 transition-colors font-medium py-3.5 hover:bg-white/5 rounded-lg px-2"
+            >
+              {{ item.label }}
+            </NuxtLink>
+            
+            <Button 
+              v-if="user"
+              as="NuxtLink"
+              :to="user.role === 'admin' ? '/admin' : '/cliente'"
+              @click="mobileMenuOpen = false"
+              variant="ghost"
+              class="text-white hover:text-accent-300 justify-start py-3.5 mt-2"
+            >
+              {{ user.role === 'admin' ? 'Admin' : 'Minha Conta' }}
+            </Button>
+          </div>
           
-          <Button 
-            v-if="user"
-            as="NuxtLink"
-            :to="user.role === 'admin' ? '/admin' : '/cliente'"
-            @click="mobileMenuOpen = false"
-            variant="ghost"
-            class="text-white hover:text-accent-300 justify-start"
-          >
-            {{ user.role === 'admin' ? 'Admin' : 'Minha Conta' }}
-          </Button>
-          
-          <Button 
-            @click="handleCTA"
-            class="bg-accent-500 hover:bg-accent-600 text-white justify-start"
-          >
-            Solicitar Orçamento
-          </Button>
+          <div class="mt-auto pt-4">
+            <Button 
+              @click="handleCTA"
+              class="bg-accent-500 hover:bg-accent-600 text-white justify-center w-full h-12 border-2 border-accent-300 shadow-lg shadow-accent-500/50"
+            >
+              Solicitar Orçamento
+            </Button>
+          </div>
         </div>
       </div>
     </div>
