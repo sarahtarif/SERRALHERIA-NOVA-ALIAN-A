@@ -31,42 +31,11 @@
 
       <!-- Grid de Imagens -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card
+        <GalleryCard
           v-for="(item, index) in filteredItems"
           :key="index"
-          class="group cursor-pointer overflow-hidden"
-        >
-          <div class="relative aspect-video bg-secondary-100 overflow-hidden">
-            <!-- Vídeo para itens com vídeo -->
-            <video
-              v-if="item.video"
-              class="w-full h-full object-cover"
-              autoplay
-              loop
-              muted
-              playsinline
-            >
-              <source :src="item.video" type="video/mp4">
-            </video>
-            <!-- Skeleton para outros itens -->
-            <Skeleton v-else class="w-full h-full" />
-            
-            <div class="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-90 transition-opacity duration-300 flex items-center justify-center">
-              <div class="text-white text-center p-6">
-                <h3 class="text-xl font-bold mb-2">{{ item.title }}</h3>
-                <p class="text-sm text-primary-100">{{ item.description }}</p>
-              </div>
-            </div>
-          </div>
-          <CardContent class="pt-4">
-            <div class="flex items-center justify-between">
-              <Badge :variant="getCategoryVariant(item.category)">
-                {{ item.category }}
-              </Badge>
-              <span class="text-sm text-text-tertiary">{{ item.location }}</span>
-            </div>
-          </CardContent>
-        </Card>
+          :item="item"
+        />
       </div>
 
       <!-- CTA -->
