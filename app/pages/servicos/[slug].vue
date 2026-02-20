@@ -175,6 +175,60 @@ const services = {
       'Evita danos no portão e reduz riscos de impacto durante o fechamento',
       'Conformidade com normas de segurança ABNT NBR 15969'
     ]
+  },
+  'interfones': {
+    slug: 'interfones',
+    category: 'Comunicação',
+    title: 'Interfones e Vídeo Porteiro',
+    description: 'Sistemas de interfonia e vídeo porteiro que permitem ver, ouvir e identificar o visitante antes de liberar a entrada, aumentando a segurança de residências, condomínios e comércios. Os equipamentos Intelbras contam com câmera integrada, display de alta qualidade e recursos como abertura de fechadura elétrica ou portão direto do monitor ou aplicativo, trazendo praticidade no dia a dia.',
+    seoText: 'Os interfones e vídeo porteiros Intelbras oferecem controle de acesso moderno, permitindo visualizar visitantes em um monitor interno com imagem nítida, inclusive em ambientes com pouca luz graças à visão noturna por infravermelho. Além da comunicação por áudio, é possível acionar fechaduras elétricas e portões diretamente pelo equipamento, com modelos que ainda permitem acesso via TAG, senha ou reconhecimento facial, trazendo mais comodidade e segurança ao dia a dia. Alguns sistemas permitem integração com aplicativos, possibilitando atender chamadas e liberar o acesso mesmo à distância, ideal para quem deseja monitorar a entrada da casa ou do condomínio de qualquer lugar.',
+    features: [
+      'Visualização nítida do visitante em display de 7" com visão mesmo em baixa iluminação',
+      'Comunicação de áudio clara para identificar e conversar com quem está no portão',
+      'Abertura de até duas fechaduras ou portão de garagem diretamente no módulo interno',
+      'Opções com acesso via TAG, senha ou app, conforme o modelo escolhido'
+    ],
+    benefits: [
+      'Mais segurança na identificação de visitantes antes de liberar a entrada',
+      'Praticidade para moradores, que podem atender e abrir o portão sem ir até a rua ou até pelo celular em modelos compatíveis',
+      'Valorização do imóvel com um sistema moderno de controle de acesso'
+    ]
+  },
+  'cameras-seguranca': {
+    slug: 'cameras-seguranca',
+    category: 'Segurança',
+    title: 'Câmeras de Segurança',
+    description: 'Sistemas de CFTV e câmeras IP com imagens em alta definição, visão noturna e áudio integrado, permitindo acompanhar em tempo real tudo o que acontece no imóvel. As câmeras podem ser acessadas pelo celular via aplicativo, oferecendo monitoramento 24 horas com envio de alertas em caso de movimento suspeito e gravação para consulta posterior.',
+    seoText: 'As câmeras de segurança com áudio e acesso via aplicativo permitem monitoramento 24 horas do imóvel, com transmissão ao vivo para celular, tablet ou computador. Com visão noturna infravermelha, áudio bidirecional e detecção de movimento, o sistema registra imagens mesmo no escuro, envia alertas e possibilita ouvir o ambiente monitorado em tempo real, ampliando a vigilância. Com a tecnologia atual, é possível integrar câmeras a sistemas de alarme e monitoramento profissional, garantindo resposta rápida em caso de eventos suspeitos e maior proteção para casas, comércios e condomínios.',
+    features: [
+      'Vídeo em tempo real com áudio bidirecional (microfone e alto-falante integrados, em modelos compatíveis)',
+      'Visão noturna infravermelha para monitorar mesmo em ambientes com pouca ou nenhuma iluminação',
+      'Acesso remoto via app em smartphones (iOS e Android), com visualização e configurações pelo celular',
+      'Opções com gravação em nuvem ou cartão de memória, detecção de movimento e envio de alertas'
+    ],
+    benefits: [
+      'Monitoramento 24h de residências, comércios e condomínios, mesmo quando o cliente está fora',
+      'Disuasão de invasões e aumento da sensação de segurança, com registros em vídeo em caso de incidentes',
+      'Possibilidade de acompanhar família, colaboradores ou pets em tempo real, direto do celular'
+    ]
+  },
+  'manutencao': {
+    slug: 'manutencao',
+    category: 'Manutenção',
+    title: 'Manutenção Preventiva',
+    description: 'A manutenção preventiva é fundamental para manter portões automáticos, motores e dispositivos de segurança funcionando com segurança, evitando falhas inesperadas e prolongando a vida útil do equipamento. O serviço inclui inspeção periódica, ajustes, limpeza, lubrificação e testes de sensores, controles remotos e mecanismos anti-esmagamento, identificando problemas antes que se tornem defeitos graves.',
+    seoText: 'A manutenção preventiva de portões automáticos e sistemas de segurança engloba cuidados regulares antes que qualquer defeito apareça, como limpeza, lubrificação, inspeção de peças e testes de funcionamento. Realizar essas visitas periódicas diminui o risco de falhas inesperadas, reduz o desgaste prematuro de componentes e evita gastos elevados com manutenção corretiva ou substituição de peças. Além da economia, manter o sistema em dia garante mais segurança para moradores e usuários, pois sensores, fotocélulas e dispositivos de parada automática seguem operando de acordo com as recomendações técnicas.',
+    features: [
+      'Verificação regular de componentes mecânicos, trilhos, engrenagens, molas e rolamentos',
+      'Limpeza e lubrificação adequada com produtos indicados para evitar desgaste e oxidação',
+      'Testes de funcionamento dos controles, motores e dispositivos de segurança, como fotocélulas e travas',
+      'Relatório técnico com orientações e, se necessário, indicação de manutenção corretiva'
+    ],
+    benefits: [
+      'Redução de paradas e quebras, evitando gastos altos com consertos emergenciais',
+      'Maior segurança para usuários, com sensores e sistemas anti-esmagamento sempre revisados e calibrados',
+      'Aumento da vida útil de motores, portões e acessórios, preservando o investimento no sistema de automação'
+    ]
   }
 }
 
