@@ -40,7 +40,7 @@
             </div>
 
             <!-- Benefícios -->
-            <div>
+            <div class="mb-8">
               <h2 class="text-2xl font-bold text-text-primary mb-4">Benefícios</h2>
               <ul class="space-y-3">
                 <li v-for="(benefit, index) in service.benefits" :key="index" class="flex items-start space-x-3">
@@ -50,6 +50,12 @@
                   <span class="text-text-primary">{{ benefit }}</span>
                 </li>
               </ul>
+            </div>
+
+            <!-- Informações Técnicas / SEO -->
+            <div v-if="service.seoText" class="bg-surface p-6 rounded-lg border border-border-light">
+              <h2 class="text-2xl font-bold text-text-primary mb-4">Informações Técnicas</h2>
+              <p class="text-text-secondary leading-relaxed">{{ service.seoText }}</p>
             </div>
           </div>
 
@@ -81,7 +87,6 @@
             >
               <Card class="h-full hover:shadow-metal-lg transition-shadow">
                 <CardContent class="p-6">
-                  <div class="text-4xl mb-4">{{ related.icon }}</div>
                   <h3 class="text-xl font-bold text-text-primary mb-2 group-hover:text-primary-500 transition-colors">
                     {{ related.title }}
                   </h3>
@@ -117,6 +122,7 @@ const services = {
     category: 'Automação',
     title: 'Automação de Portões',
     description: 'Instalação e manutenção de motores para portões basculantes, deslizantes e pivotantes. Trabalhamos com as melhores marcas do mercado.',
+    seoText: undefined,
     features: [
       'Motores PPA, Garen, RCG e Intelbras',
       'Instalação profissional certificada',
@@ -137,6 +143,7 @@ const services = {
     category: 'Segurança',
     title: 'Travas Eletrônicas',
     description: 'Instalação de travas eletrônicas de alta segurança para portões e portas. Proteção adicional contra invasões.',
+    seoText: undefined,
     features: [
       'Travas de alta resistência',
       'Acionamento por controle remoto',
@@ -150,6 +157,23 @@ const services = {
       'Controle de acesso',
       'Durabilidade garantida',
       'Fácil operação'
+    ]
+  },
+  'fotocelula': {
+    slug: 'fotocelula',
+    category: 'Segurança',
+    title: 'Fotocélula Anti-Esmagamento',
+    description: 'Fotocélula Anti-Esmagamento (sensor de barreira). A fotocélula é um dispositivo essencial de segurança para portões automáticos, projetado para evitar colisões durante o fechamento ao identificar qualquer obstrução no vão. Ela funciona com transmissor e receptor alinhados formando um "feixe invisível"; quando esse feixe é interrompido, a central do automatizador recebe o sinal e interrompe o movimento (geralmente parando e/ou revertendo para abertura).',
+    seoText: 'A fotocélula anti-esmagamento para portão automático cria uma barreira de segurança no acesso e impede o fechamento quando há alguém ou algo no caminho. Ela é composta por um transmissor e um receptor que precisam ficar alinhados; ao interromper o feixe, a central entende a presença de obstáculo e age para evitar a colisão. A norma ABNT NBR 15969 é citada como a principal regulamentação de segurança para portões automáticos no Brasil e inclui requisitos ligados à instalação correta de sensores e sistemas de parada automática para prevenir acidentes.',
+    features: [
+      'Barreira por feixe (emissor + receptor) com alinhamento técnico e testes de funcionamento',
+      'Resposta imediata ao detectar obstrução no trajeto do portão',
+      'Integração com a central do automatizador para segurança no fechamento automático'
+    ],
+    benefits: [
+      'Mais segurança para crianças, pedestres e veículos na entrada/saída',
+      'Evita danos no portão e reduz riscos de impacto durante o fechamento',
+      'Conformidade com normas de segurança ABNT NBR 15969'
     ]
   }
 }

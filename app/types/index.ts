@@ -68,6 +68,18 @@ export interface GalleryItem {
   created_at: string
 }
 
+export interface GalleryCardItem {
+  title: string
+  description: string
+  category: string
+  location: string
+  video: string | null
+  image?: string | null
+  isNew?: boolean
+  partnerLink?: string
+  partnerName?: string
+}
+
 export interface Service {
   slug: string
   title: string

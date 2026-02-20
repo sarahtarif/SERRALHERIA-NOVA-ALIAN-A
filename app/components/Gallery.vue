@@ -57,6 +57,8 @@
 </template>
 
 <script setup lang="ts">
+import type { GalleryCardItem } from '~/types'
+
 const selectedCategory = ref('todos')
 
 const categories = [
@@ -65,51 +67,61 @@ const categories = [
   { label: 'Automação', value: 'automacao' },
   { label: 'Travas', value: 'travas' },
   { label: 'Câmeras', value: 'cameras' },
-  { label: 'Interfones', value: 'interfones' }
+  { label: 'Interfones', value: 'interfones' },
+  { label: 'Manutenção', value: 'manutencao' }
 ]
 
-const galleryItems = [
+const galleryItems: GalleryCardItem[] = [
   {
-    title: 'Automação Portão Basculante',
-    description: 'Motor PPA com fotocélula e controle remoto',
+    title: 'Protetor de Rede para Motor de Portão (DPS Anti-Surto)',
+    description: 'Proteção contra picos/surtos de energia que podem danificar a placa e o motor. Aumenta a vida útil do automatizador e reduz custos com manutenção.',
     category: 'automacao',
     location: 'Vila Mariana',
-    video: null
+    video: null,
+    image: '/protetor_rede.png',
+    isNew: false
   },
   {
     title: 'Portão Deslizante Industrial',
     description: 'Portão de 6 metros com automação completa',
     category: 'portoes',
     location: 'Santo Amaro',
-    video: '/portao_6metros.mp4'
+    video: '/portao_6metros.mp4',
+    isNew: false
   },
   {
     title: 'Sistema de Travas Eletrônicas',
-    description: 'Instalação de travas de segurança',
+    description: 'Fechadura eletrônica com alta segurança, com abertura via Tag, botoeira com até 600 controles cadastrados e chave manual!',
     category: 'travas',
     location: 'Moema',
-    video: null
+    video: '/Fechadura eletrônica com alta segurança, com abertura via Tag, botoeira com até 600 controles ca.mp4',
+    isNew: false,
+    partnerLink: 'https://www.instagram.com/sunsegdistribuidora/',
+    partnerName: '@sunsegdistribuidora'
   },
   {
     title: 'Câmeras de Segurança',
-    description: 'Sistema com 8 câmeras e acesso via app',
+    description: 'Novidade excelente! A câmera possui microfone e audio para ouvir o que está acontecendo no ambiente que ela for instalada.',
     category: 'cameras',
     location: 'Pinheiros',
-    video: null
+    video: '/camera_seguranca.mp4',
+    isNew: true
   },
   {
     title: 'Vídeo Porteiro Intelbras',
     description: 'Instalação completa com interfone',
     category: 'interfones',
     location: 'Itaim Bibi',
-    video: '/interfones.mp4'
+    video: '/interfones.mp4',
+    isNew: false
   },
   {
     title: 'Manutenção Preventiva',
     description: 'Revisão completa de motor e sensores',
-    category: 'automacao',
+    category: 'manutencao',
     location: 'Jardins',
-    video: '/manutencao_preventiva.mp4'
+    video: '/manutancao_preventiva.mp4',
+    isNew: false
   }
 ]
 
@@ -126,7 +138,8 @@ const getCategoryVariant = (category: string) => {
     portoes: 'info',
     travas: 'warning',
     cameras: 'danger',
-    interfones: 'success'
+    interfones: 'success',
+    manutencao: 'default'
   }
   return variants[category] || 'default'
 }
