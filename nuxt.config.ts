@@ -18,6 +18,11 @@ export default defineNuxtConfig({
     }
   ],
   runtimeConfig: {
+    // Private (server-side only)
+    gmailEmail: process.env.GMAIL_EMAIL || '',
+    gmailAppPassword: process.env.GMAIL_APP_PASSWORD || '',
+    securityAlertEmail: process.env.SECURITY_ALERT_EMAIL || '',
+    
     public: {
       supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL || '',
       supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || '',

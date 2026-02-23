@@ -22,3 +22,9 @@ logs
 .env
 .env.*
 !.env.example
+
+# Security - Credenciais sensíveis
+ADMIN_CREDENTIALS.md
+*_CREDENTIALS.md
+*.secret
+*.key

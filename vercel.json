@@ -1,0 +1,76 @@
+{
+  "headers": [
+    {
+      "source": "/sys/mgmt/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=()"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, private"
+        }
+      ]
+    },
+    {
+      "source": "/auth/secure/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, private"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/404"
+    },
+    {
+      "source": "/painel",
+      "destination": "/404"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/404"
+    },
+    {
+      "source": "/wp-admin",
+      "destination": "/404"
+    },
+    {
+      "source": "/administrator",
+      "destination": "/404"
+    }
+  ]
+}
