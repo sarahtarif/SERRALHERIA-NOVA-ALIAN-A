@@ -22,7 +22,7 @@
             v-for="item in menuItems" 
             :key="item.path"
             :to="item.path"
-            class="text-white hover:text-accent-300 transition-colors font-medium"
+            class="text-white hover:text-accent-300 transition-colors font-medium cursor-pointer"
           >
             {{ item.label }}
           </NuxtLink>
@@ -66,7 +66,7 @@
               :key="item.path"
               :to="item.path"
               @click="mobileMenuOpen = false"
-              class="text-white hover:text-accent-300 transition-colors font-medium py-3.5 hover:bg-white/5 rounded-lg px-2"
+              class="text-white hover:text-accent-300 transition-colors font-medium py-3.5 hover:bg-white/5 rounded-lg px-2 cursor-pointer"
             >
               {{ item.label }}
             </NuxtLink>
@@ -106,6 +106,7 @@ const menuItems = [
   { label: 'Home', path: '/' },
   { label: 'Serviços', path: '/servicos' },
   { label: 'Trabalhos', path: '/trabalhos' },
+  { label: 'Área do Cliente', path: '/clientes' },
   { label: 'Sobre', path: '/sobre' },
   { label: 'Contato', path: '/contato' }
 ]

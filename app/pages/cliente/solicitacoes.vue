@@ -11,12 +11,20 @@
             </h1>
             <p class="text-text-secondary">Acompanhe o status de todos os seus pedidos</p>
           </div>
-          <Button @click="router.push('/cliente/solicitacoes/nova')">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Nova Solicitação
-          </Button>
+          <div class="flex gap-3">
+            <Button variant="outline" @click="router.push('/cliente')">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Voltar
+            </Button>
+            <Button @click="router.push('/cliente/solicitacoes/nova')">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Nova Solicitação
+            </Button>
+          </div>
         </div>
 
         <!-- Filtros -->
@@ -112,7 +120,7 @@ const selectedStatus = ref<string>('all')
 
 const statusFilters = [
   { value: 'all', label: 'Todas' },
-  { value: 'recebido', label: 'Recebidas' },
+  { value: 'recebido', label: 'Enviadas' },
   { value: 'em_analise', label: 'Em Análise' },
   { value: 'agendado', label: 'Agendadas' },
   { value: 'em_execucao', label: 'Em Execução' },

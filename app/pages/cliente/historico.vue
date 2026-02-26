@@ -4,11 +4,19 @@
     
     <div class="py-12">
       <div class="container mx-auto px-4">
-        <div class="mb-8">
-          <h1 class="text-3xl md:text-4xl font-bold text-text-primary mb-2">
-            Histórico de Serviços
-          </h1>
-          <p class="text-text-secondary">Veja todos os serviços realizados</p>
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-text-primary mb-2">
+              Serviços Contratados
+            </h1>
+            <p class="text-text-secondary">Veja todos os serviços que você contratou</p>
+          </div>
+          <Button variant="outline" @click="router.push('/cliente')">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Voltar
+          </Button>
         </div>
 
         <div v-if="jobs.length > 0" class="space-y-6">
@@ -93,8 +101,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="font-bold text-text-primary mb-2">Nenhum serviço realizado ainda</h3>
-            <p class="text-text-secondary mb-6">Quando seus serviços forem concluídos, eles aparecerão aqui</p>
+            <h3 class="font-bold text-text-primary mb-2">Nenhum serviço contratado ainda</h3>
+            <p class="text-text-secondary mb-6">Quando você contratar serviços, eles aparecerão aqui</p>
             <Button @click="router.push('/cliente/solicitacoes/nova')">
               Solicitar Serviço
             </Button>
@@ -137,7 +145,7 @@ const getItemTypeLabel = (type: JobItem['item_type']) => {
 }
 
 useHead({
-  title: 'Histórico - Área do Cliente',
+  title: 'Serviços Contratados - Área do Cliente',
   meta: [
     { name: 'robots', content: 'noindex, nofollow' }
   ]

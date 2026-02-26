@@ -52,7 +52,7 @@
         <Card class="bg-gradient-to-r from-primary-600 to-primary-800 text-white border-0">
           <CardContent class="p-8">
             <div class="flex items-center justify-between">
-              <div>
+              <div class="flex-1">
                 <h2 class="text-3xl font-bold mb-2">Bem-vindo, {{ profile?.name }}!</h2>
                 <p class="text-primary-100 text-lg">
                   Acesso autorizado ao painel administrativo
@@ -60,6 +60,21 @@
                 <p class="text-primary-200 text-sm mt-2">
                   Último acesso: {{ lastAccess }}
                 </p>
+                
+                <!-- Botão de Acesso ao Painel -->
+                <div class="mt-6">
+                  <NuxtLink to="/admin">
+                    <Button 
+                      size="lg" 
+                      class="bg-white text-primary-700 hover:bg-primary-50 font-semibold shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                      Acessar Painel de Gestão
+                    </Button>
+                  </NuxtLink>
+                </div>
               </div>
               <div class="hidden lg:block">
                 <div class="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">

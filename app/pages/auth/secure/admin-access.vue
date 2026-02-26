@@ -158,8 +158,15 @@ const captchaChecked = ref(false)
 const blocked = ref(false)
 const rateLimitWarning = ref(false)
 
-const { signIn, loadProfile } = useAuth()
+const { signIn, loadProfile, user, profile, isAdmin } = useAuth()
 const router = useRouter()
+
+// Redirecionar se já estiver autenticado como admin
+onMounted(() => {
+  if (user.value && isAdmin.value) {
+    router.push('/admin')
+  }
+})
 
 // Detectar bot via honeypot
 const isBotDetected = computed(() => honeypot.value !== '')
@@ -255,7 +262,7 @@ const handleLogin = async () => {
     }
 
     // Sucesso - redirecionar para painel admin
-    router.push('/sys/mgmt/dashboard-v2')
+    router.push('/admin')
     
   } catch (e: any) {
     console.error('[LOGIN] Erro:', e)

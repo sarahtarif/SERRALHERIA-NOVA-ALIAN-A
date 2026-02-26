@@ -8,8 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (!user.value) {
     console.warn('[SECURITY] Tentativa de acesso não autenticado:', {
       route: to.path,
-      timestamp: new Date().toISOString(),
-      ip: 'client-side' // IP será logado no server-side
+      timestamp: new Date().toISOString()
     })
     
     return navigateTo('/auth/secure/admin-access')
@@ -17,7 +16,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   
   // CAMADA 2: Carregar perfil se não estiver carregado
   if (!profile.value) {
-    await loadProfile(user.value.id)
+    try {
+      await loadProfile(user.value.id)
+    } catch (error) {
+      console.error('[AUTH] Erro ao carregar perfil:', error)
+      return navigateTo('/auth/secure/admin-access')
+    }
   }
   
   // CAMADA 3: Verificar role admin
@@ -30,7 +34,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       timestamp: new Date().toISOString()
     })
     
-    // Log de auditoria (server-side)
+    // Log de auditoria (server-side) - não bloquear se falhar
     try {
       await $fetch('/api/security/log-unauthorized', {
         method: 'POST',
@@ -44,6 +48,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         }
       })
     } catch (error) {
+      // Silenciar erro - não bloquear navegação
       console.error('[SECURITY] Erro ao registrar tentativa não autorizada:', error)
     }
     
@@ -55,7 +60,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo('/')
   }
   
-  // CAMADA 4: Audit log de acesso autorizado
+  // CAMADA 4: Audit log de acesso autorizado - não bloquear se falhar
   try {
     await $fetch('/api/security/log-access', {
       method: 'POST',
@@ -68,6 +73,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       }
     })
   } catch (error) {
+    // Silenciar erro - não bloquear navegação
     console.error('[SECURITY] Erro ao registrar acesso:', error)
   }
   
