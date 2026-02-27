@@ -28,16 +28,6 @@
           </NuxtLink>
           
           <Button 
-            v-if="user"
-            as="NuxtLink"
-            :to="user.role === 'admin' ? '/admin' : '/cliente'"
-            variant="ghost"
-            class="text-white hover:text-accent-300"
-          >
-            {{ user.role === 'admin' ? 'Admin' : 'Minha Conta' }}
-          </Button>
-          
-          <Button 
             @click="handleCTA"
             class="bg-accent-500 hover:bg-accent-600 text-white shadow-lg shadow-accent-500/50 border-2 border-accent-300"
           >
@@ -70,17 +60,6 @@
             >
               {{ item.label }}
             </NuxtLink>
-            
-            <Button 
-              v-if="user"
-              as="NuxtLink"
-              :to="user.role === 'admin' ? '/admin' : '/cliente'"
-              @click="mobileMenuOpen = false"
-              variant="ghost"
-              class="text-white hover:text-accent-300 justify-start py-3.5 mt-2"
-            >
-              {{ user.role === 'admin' ? 'Admin' : 'Minha Conta' }}
-            </Button>
           </div>
           
           <div class="mt-auto pt-4">

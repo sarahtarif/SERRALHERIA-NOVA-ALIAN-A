@@ -170,7 +170,9 @@ export const useAuth = () => {
 
   // Atualizar perfil
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user.value) return { error: new Error('Usuário não autenticado') }
+    if (!user.value) {
+      throw new Error('Usuário não autenticado')
+    }
 
     const { data, error } = await supabase
       .from('profiles')
