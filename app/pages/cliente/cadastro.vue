@@ -157,7 +157,7 @@ const handleRegister = async () => {
       form[key as keyof typeof form] = ''
     })
   } catch (e: any) {
-    error.value = e.message || 'Erro ao criar conta'
+    error.value = e?.message || String(e) || 'Erro ao criar conta'
   } finally {
     loading.value = false
   }
