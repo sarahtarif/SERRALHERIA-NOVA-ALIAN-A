@@ -7,7 +7,7 @@
         <!-- Header -->
         <div class="mb-8">
           <h1 class="text-3xl md:text-4xl font-bold text-text-primary mb-2">
-            Olá, {{ user?.name || 'Cliente' }}!
+            Olá, {{ profile?.name || 'Cliente' }}!
           </h1>
           <p class="text-text-secondary">Gerencie suas solicitações e acompanhe seus serviços</p>
         </div>
@@ -110,7 +110,7 @@
 import type { Request } from '~/types'
 
 const router = useRouter()
-const { user } = useAuth()
+const { user, profile } = useAuth()
 
 // Mock data - substituir por dados reais do Supabase
 const recentRequests = ref<Request[]>([])
