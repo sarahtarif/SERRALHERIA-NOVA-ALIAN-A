@@ -1,10 +1,20 @@
-// Middleware de autenticação básica
-export default defineNuxtRouteMiddleware(async (to, from) => {
+/**
+ * Middleware de autenticação básica
+ * Verifica se o usuário está autenticado e redireciona para login apropriado
+ * 
+ * @see docs/AUTENTICACAO-AUTORIZACAO.md
+ * @see https://nuxt.com/docs/guide/directory-structure/middleware
+ */
+export default defineNuxtRouteMiddleware(async (to) => {
   const { user, initAuth } = useAuth()
   
   // Inicializar autenticação se necessário
   if (!user.value) {
-    await initAuth()
+    try {
+      await initAuth()
+    } catch (error) {
+      console.error('[AUTH] Erro ao inicializar autenticação:', error)
+    }
   }
   
   // Se não estiver autenticado, redirecionar para login apropriado

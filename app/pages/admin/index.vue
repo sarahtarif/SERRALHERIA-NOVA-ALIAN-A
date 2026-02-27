@@ -168,8 +168,17 @@
 </template>
 
 <script setup lang="ts">
+// Proteção SEO e middleware
 definePageMeta({
   middleware: ['auth', 'admin']
+})
+
+useHead({
+  title: 'Dashboard - Admin Nova Aliança',
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow' },
+    { name: 'googlebot', content: 'noindex, nofollow' }
+  ]
 })
 
 // Dados mockados (substituir por API real)
@@ -202,8 +211,4 @@ const getStatusVariant = (status: string) => {
   }
   return variants[status] || 'default'
 }
-
-useHead({
-  title: 'Dashboard - Admin Nova Aliança'
-})
 </script>

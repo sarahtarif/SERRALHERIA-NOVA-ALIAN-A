@@ -1,6 +1,10 @@
-// Middleware de verificação de role admin
-// Aplica defesa em profundidade com múltiplas verificações
-
+/**
+ * Middleware de verificação de role admin
+ * Aplica defesa em profundidade com 5 camadas de verificação
+ * 
+ * @see docs/AUTENTICACAO-AUTORIZACAO.md
+ * @see https://nuxt.com/docs/guide/directory-structure/middleware
+ */
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { user, profile, isAdmin, loadProfile } = useAuth()
   

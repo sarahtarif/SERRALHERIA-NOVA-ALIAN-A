@@ -1,3 +1,10 @@
+/**
+ * Composable de autenticação e autorização
+ * Gerencia estado de usuário, perfil e sessão com Supabase Auth
+ * 
+ * @see docs/AUTENTICACAO-AUTORIZACAO.md
+ * @see https://supabase.com/docs/guides/auth
+ */
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '~/types'
 
@@ -9,37 +16,62 @@ export const useAuth = () => {
 
   // Inicializar sessão
   const initAuth = async () => {
-    const { data: { session: currentSession } } = await supabase.auth.getSession()
-    
-    if (currentSession) {
-      session.value = currentSession
-      user.value = currentSession.user
-      await loadProfile(currentSession.user.id)
-    }
-
-    // Listener para mudanças de autenticação
-    supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      session.value = newSession
-      user.value = newSession?.user ?? null
+    try {
+      const { data: { session: currentSession }, error } = await supabase.auth.getSession()
       
-      if (newSession?.user) {
-        await loadProfile(newSession.user.id)
-      } else {
-        profile.value = null
+      if (error) {
+        console.error('[AUTH] Erro ao obter sessão:', error)
+        return
       }
-    })
+      
+      if (currentSession) {
+        session.value = currentSession
+        user.value = currentSession.user
+        await loadProfile(currentSession.user.id)
+      }
+
+      // Listener para mudanças de autenticação
+      supabase.auth.onAuthStateChange(async (_event, newSession) => {
+        session.value = newSession
+        user.value = newSession?.user ?? null
+        
+        if (newSession?.user) {
+          await loadProfile(newSession.user.id)
+        } else {
+          profile.value = null
+        }
+      })
+    } catch (error) {
+      console.error('[AUTH] Erro ao inicializar autenticação:', error)
+      throw error
+    }
   }
 
   // Carregar perfil do usuário
   const loadProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
+    if (!userId) {
+      console.warn('[AUTH] userId inválido para loadProfile')
+      return
+    }
 
-    if (!error && data) {
-      profile.value = data as Profile
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+
+      if (error) {
+        console.error('[AUTH] Erro ao carregar perfil:', error)
+        throw error
+      }
+
+      if (data) {
+        profile.value = data as Profile
+      }
+    } catch (error) {
+      console.error('[AUTH] Exceção ao carregar perfil:', error)
+      throw error
     }
   }
 
