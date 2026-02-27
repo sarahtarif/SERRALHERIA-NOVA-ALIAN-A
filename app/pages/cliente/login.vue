@@ -120,7 +120,7 @@ const handleLogin = async () => {
 
     router.push('/cliente')
   } catch (e: any) {
-    error.value = e.message || 'Erro ao fazer login'
+    error.value = e?.message || String(e) || 'Erro ao fazer login'
   } finally {
     loading.value = false
   }
