@@ -22,7 +22,7 @@
             <Select id="client_id" v-model="localData.client_id">
               <option value="">Selecione um cliente</option>
               <option v-for="client in clients" :key="client.id" :value="client.id">
-                {{ client.profile_id }}
+                {{ client.name }}
               </option>
             </Select>
           </div>

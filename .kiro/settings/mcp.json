@@ -8,7 +8,8 @@
       ],
       "autoApprove": [
         "search_items_in_registries",
-        "view_items_in_registries"
+        "view_items_in_registries",
+        "get_project_registries"
       ]
     }
   }

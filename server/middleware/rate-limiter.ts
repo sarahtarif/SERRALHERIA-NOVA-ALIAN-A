@@ -27,10 +27,10 @@ const RATE_LIMITS = {
     message: 'Limite de requisições excedido. Tente novamente em 5 minutos.'
   },
   '/api/admin': {
-    windowMs: 60 * 1000,
-    max: 30,
-    blockDuration: 5 * 60 * 1000,
-    message: 'Limite de requisições excedido. Tente novamente em 5 minutos.'
+    windowMs: 60 * 1000, // 1 minuto
+    max: 1000, // 1000 requisições por minuto
+    blockDuration: 2 * 60 * 1000, // 2 minutos de bloqueio
+    message: 'Limite de requisições excedido. Tente novamente em 2 minutos.'
   },
   default: {
     windowMs: 60 * 1000,

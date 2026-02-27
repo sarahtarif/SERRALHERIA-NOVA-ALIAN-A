@@ -7,9 +7,9 @@ import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
   try {
-    // Criar cliente Supabase
+    // Criar cliente Supabase com Service Role Key (bypass RLS)
     const supabaseUrl = process.env.NUXT_PUBLIC_SUPABASE_URL!
-    const supabaseKey = process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY!
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
     const supabase = createClient(supabaseUrl, supabaseKey)
     const query = getQuery(event)
     const limit = query.limit ? parseInt(query.limit as string) : 5

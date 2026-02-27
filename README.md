@@ -8,8 +8,9 @@ Site profissional completo para serralheria com foco em conversão via WhatsApp.
 - **Vue 3** - Framework JavaScript
 - **TypeScript** - Tipagem estática
 - **Tailwind CSS** - Framework CSS
-- **Supabase** - Backend (Auth + Database)
+- **Supabase** - Backend (Auth + Database + RLS)
 - **@vueuse/core** - Utilitários Vue
+- **@supabase/supabase-js** - Cliente Supabase
 
 ## 📋 Funcionalidades
 
@@ -34,13 +35,24 @@ Site profissional completo para serralheria com foco em conversão via WhatsApp.
 - 🔄 Integração completa com Supabase
 
 ### Área Admin
-- ✅ Página de login admin
-- 🔄 Dashboard administrativo
-- 🔄 CRUD de clientes
-- 🔄 CRUD de solicitações
+- ✅ Autenticação e autorização admin
+- ✅ Dashboard com KPIs e estatísticas
+- ✅ CRUD completo de Leads
+  - Listagem com filtros e paginação
+  - Criação, edição e exclusão
+  - Conversão de lead para cliente
+- ✅ CRUD completo de Orçamentos
+  - Criação com cálculo automático de impostos
+  - Geração de PDF
+  - Envio por email
+  - Vinculação com leads e clientes
+- ✅ Listagem de Clientes
+- ✅ Middleware de segurança
+- ✅ Audit logs de acesso
+- ✅ Rate limiting
 - 🔄 CRUD de serviços
 - 🔄 CRUD de portfólio
-- 🔄 Exportação de leads
+- 🔄 Agenda de serviços
 
 ## 🎨 Sistema de Cores
 
@@ -106,6 +118,13 @@ NUXT_PUBLIC_COMPANY_PHONE=(11) 99999-9999
 ├── app/
 │   ├── components/       # Componentes Vue
 │   │   ├── ui/          # Componentes UI base
+│   │   ├── admin/       # Componentes admin
+│   │   │   ├── AdminLayout.vue
+│   │   │   ├── dashboard/
+│   │   │   ├── leads/
+│   │   │   ├── orcamentos/
+│   │   │   └── shared/
+│   │   ├── clientes/    # Componentes área clientes
 │   │   ├── Navbar.vue
 │   │   ├── Footer.vue
 │   │   ├── Hero.vue
@@ -115,35 +134,52 @@ NUXT_PUBLIC_COMPANY_PHONE=(11) 99999-9999
 │   │   ├── LeadForm.vue
 │   │   └── WhatsAppFloatingButton.vue
 │   ├── composables/     # Composables Vue
+│   │   ├── admin/       # Composables admin
+│   │   │   ├── useDashboard.ts
+│   │   │   ├── useLeads.ts
+│   │   │   └── useOrcamentos.ts
 │   │   ├── useAuth.ts
 │   │   ├── useSupabase.ts
 │   │   └── useWhatsApp.ts
+│   ├── middleware/      # Middleware de rotas
+│   │   ├── auth.ts
+│   │   └── admin.ts
 │   ├── pages/           # Páginas (rotas)
 │   │   ├── index.vue
 │   │   ├── servicos/
-│   │   │   ├── index.vue
-│   │   │   └── [slug].vue
 │   │   ├── trabalhos.vue
 │   │   ├── sobre.vue
 │   │   ├── contato.vue
-│   │   ├── cliente/
-│   │   │   ├── login.vue
-│   │   │   ├── cadastro.vue
-│   │   │   ├── index.vue (dashboard)
-│   │   │   ├── solicitacoes.vue
-│   │   │   ├── solicitacoes/nova.vue
-│   │   │   └── historico.vue
-│   │   └── admin/
-│   │       └── login.vue
+│   │   ├── cliente/     # Área do cliente
+│   │   └── admin/       # Área admin
+│   │       ├── index.vue (dashboard)
+│   │       ├── login.vue
+│   │       ├── leads/
+│   │       │   ├── index.vue
+│   │       │   ├── novo.vue
+│   │       │   └── [id].vue
+│   │       └── orcamentos/
+│   │           ├── index.vue
+│   │           ├── novo.vue
+│   │           └── [id].vue
 │   ├── types/           # Tipos TypeScript
 │   └── app.vue          # App principal
-├── components/          # Componentes globais
-│   └── ui/             # Componentes UI (auto-import)
-├── lib/
-│   └── utils.ts         # Utilitários
-├── public/              # Arquivos estáticos
-├── tailwind.config.js   # Configuração Tailwind
-├── nuxt.config.ts       # Configuração Nuxt
+├── server/              # Server-side
+│   ├── api/            # API routes
+│   │   ├── admin/
+│   │   │   ├── dashboard/
+│   │   │   ├── leads/
+│   │   │   ├── orcamentos/
+│   │   │   └── clients/
+│   │   └── security/
+│   ├── middleware/     # Server middleware
+│   ├── services/       # Business logic
+│   └── utils/          # Utilitários server
+├── docs/               # Documentação
+├── tests/              # Testes
+├── public/             # Arquivos estáticos
+├── tailwind.config.js  # Configuração Tailwind
+├── nuxt.config.ts      # Configuração Nuxt
 └── package.json
 ```
 
@@ -165,10 +201,14 @@ O site foi otimizado para conversão via WhatsApp:
 
 ## 🔒 Segurança
 
-- Validação de formulários (client e server)
-- RLS (Row Level Security) no Supabase
-- Proteção de rotas com middleware
-- Sanitização de inputs
+- ✅ Validação de formulários (client e server)
+- ✅ RLS (Row Level Security) no Supabase
+- ✅ Proteção de rotas com middleware (auth + admin)
+- ✅ Sanitização de inputs
+- ✅ Service Role Key para operações admin
+- ✅ Audit logs de acesso
+- ✅ Rate limiting (5 req/min)
+- ✅ Meta tags noindex/nofollow em páginas admin
 
 ## 🚀 Deploy
 

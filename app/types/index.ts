@@ -233,3 +233,142 @@ export interface ImpostosConfig {
   aliquota_cofins: number
   aliquota_csll: number
 }
+
+// Serviços Types
+export interface Servico {
+  id: string
+  nome: string
+  descricao?: string
+  categoria: 'instalacao' | 'manutencao' | 'reparo' | 'orcamento'
+  tipo_servico: string // Ex: 'redes', 'portoes', 'cameras', etc.
+  status: 'agendado' | 'em_execucao' | 'concluido' | 'cancelado'
+  client_id?: string
+  lead_id?: string
+  orcamento_id?: string
+  tecnico_id?: string
+  data_agendada?: string
+  data_inicio?: string
+  data_conclusao?: string
+  endereco?: string
+  bairro?: string
+  cidade: string
+  observacoes?: string
+  valor?: number
+  created_by: string
+  created_at: string
+  updated_at?: string
+}
+
+export interface ServicoFormData {
+  nome: string
+  descricao?: string
+  categoria: 'instalacao' | 'manutencao' | 'reparo' | 'orcamento'
+  tipo_servico: string
+  status?: 'agendado' | 'em_execucao' | 'concluido' | 'cancelado'
+  client_id?: string
+  lead_id?: string
+  orcamento_id?: string
+  tecnico_id?: string
+  data_agendada?: string
+  endereco?: string
+  bairro?: string
+  cidade?: string
+  observacoes?: string
+  valor?: number
+}
+
+export interface ServicoFilters {
+  search?: string
+  categoria?: 'instalacao' | 'manutencao' | 'reparo' | 'orcamento'
+  tipo_servico?: string
+  status?: 'agendado' | 'em_execucao' | 'concluido' | 'cancelado'
+  tecnico_id?: string
+  client_id?: string
+  date_from?: string
+  date_to?: string
+  bairro?: string
+}
+
+export interface ServicosPagination {
+  page: number
+  per_page: number
+  total: number
+  total_pages: number
+}
+
+export interface PaginatedServicos {
+  data: Servico[]
+  pagination: ServicosPagination
+}
+
+export interface ServicoWithRelations extends Servico {
+  client?: Client
+  lead?: Lead
+  orcamento?: Orcamento
+  tecnico?: Profile
+  agenda_items?: AgendaItem[]
+}
+
+// Agenda Types
+export interface AgendaItem {
+  id: string
+  servico_id: string
+  data: string // YYYY-MM-DD
+  hora_inicio: string // HH:mm
+  hora_fim?: string // HH:mm
+  tecnico_id?: string
+  status: 'agendado' | 'em_andamento' | 'concluido' | 'cancelado'
+  observacoes?: string
+  created_at: string
+  updated_at?: string
+}
+
+export interface AgendaItemFormData {
+  servico_id: string
+  data: string
+  hora_inicio: string
+  hora_fim?: string
+  tecnico_id?: string
+  status?: 'agendado' | 'em_andamento' | 'concluido' | 'cancelado'
+  observacoes?: string
+}
+
+export interface AgendaFilters {
+  date_from?: string
+  date_to?: string
+  tecnico_id?: string
+  status?: 'agendado' | 'em_andamento' | 'concluido' | 'cancelado'
+  tipo_servico?: string
+}
+
+export interface AgendaDay {
+  date: string
+  items: AgendaItemWithServico[]
+  total: number
+}
+
+export interface AgendaItemWithServico extends AgendaItem {
+  servico: ServicoWithRelations
+  tecnico?: Profile
+}
+
+export interface AgendaCalendarEvent {
+  id: string
+  title: string
+  start: Date
+  end: Date
+  color: string
+  servico_id: string
+  tecnico_id?: string
+  status: string
+  tipo_servico: string
+}
+
+// Serviço-Agenda Relation (para múltiplos agendamentos)
+export interface ServicoAgenda {
+  id: string
+  servico_id: string
+  agenda_item_id: string
+  ordem: number
+  created_at: string
+}
