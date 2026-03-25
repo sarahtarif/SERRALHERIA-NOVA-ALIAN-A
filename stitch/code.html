@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&amp;family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-primary": "#7e5700",
+              "on-secondary-fixed-variant": "#114783",
+              "primary": "#ffba35",
+              "primary-fixed": "#ffdeac",
+              "tertiary-container": "#181a1a",
+              "error-container": "#93000a",
+              "primary-container": "#261700",
+              "surface-container-highest": "#283646",
+              "secondary-fixed-dim": "#a7c8ff",
+              "on-tertiary-fixed": "#1a1c1c",
+              "on-secondary-fixed": "#001b3c",
+              "surface-variant": "#283646",
+              "on-secondary": "#003061",
+              "background": "#061423",
+              "tertiary-fixed-dim": "#c6c6c7",
+              "inverse-surface": "#d6e4f9",
+              "on-primary": "#422c00",
+              "surface-container-low": "#0f1c2c",
+              "outline": "#8e9196",
+              "secondary": "#a7c8ff",
+              "on-error": "#690005",
+              "inverse-on-surface": "#243141",
+              "surface-tint": "#ffba35",
+              "on-secondary-container": "#8cb7fa",
+              "secondary-container": "#114783",
+              "error": "#ffb4ab",
+              "on-tertiary-fixed-variant": "#454747",
+              "surface-bright": "#2d3a4a",
+              "tertiary-fixed": "#e2e2e2",
+              "surface-container-high": "#1e2b3b",
+              "surface-container": "#132030",
+              "tertiary": "#c6c6c7",
+              "on-primary-container": "#ad7900",
+              "surface": "#061423",
+              "on-error-container": "#ffdad6",
+              "outline-variant": "#44474c",
+              "primary-fixed-dim": "#ffba35",
+              "on-tertiary": "#2f3131",
+              "on-surface-variant": "#c4c6cc",
+              "on-surface": "#d6e4f9",
+              "on-background": "#d6e4f9",
+              "on-primary-fixed-variant": "#5f4100",
+              "on-tertiary-container": "#818383",
+              "on-primary-fixed": "#281900",
+              "surface-dim": "#061423",
+              "secondary-fixed": "#d5e3ff",
+              "surface-container-lowest": "#020f1e"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .metallic-gradient {
+        background: linear-gradient(135deg, #ffba35 0%, #ad7900 100%);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body antialiased overflow-x-hidden">
+<!-- Top Navigation Mobile -->
+<nav class="fixed top-0 w-full z-50 bg-[#061423]/80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4">
+<span class="text-2xl font-bold tracking-tighter text-primary font-headline">Serralheria Nova Aliança</span>
+<button class="text-primary p-1">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Hero Section -->
+<main class="relative min-h-screen flex flex-col pt-20 overflow-hidden">
+<!-- Background Image with Tonal Layering -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-40 mix-blend-luminosity" data-alt="Close-up of a high-tech automated gate motor with industrial metal textures, dramatic shadows and golden accent lighting, cinematic dark atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLd1R2avVx-pwk5TnuMcU_ZtGVY0_6_Zqk-n72r9rqkDF4eKk7vQmgJq9A58YloDo6dgj8mD-znF0ZSLUKd42Rn5CR8p4VQ6-kkfokuh2PRkYRvx-Q9vMzx4xgyk0jytvd6uBl0nz-frSVaHe1JUkpfOGNfGrJeXLfXm_PX6Vs0wZW0qyzMIDM_7QOIxM845XAJj_K7HQ7NuCYFRmk_w3lLxU-uu-GSQI2ZVu_BpEaE9qSSb3dYeP2VGkYe12Ba216SWwWSZ-vAwc"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface/60 via-surface to-surface"></div>
+</div>
+<section class="relative z-10 px-6 py-12 flex flex-col gap-8 flex-grow">
+<!-- Badges/Status Indicator -->
+<div class="flex items-center gap-2 self-start bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant/15">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#ffba35]"></span>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">Atendimento Prioritário SP</span>
+</div>
+<!-- Headlines -->
+<div class="space-y-4">
+<h1 class="text-4xl font-headline font-bold leading-tight tracking-tight text-on-surface">
+                    Automação de <span class="text-primary">Portões</span> em São Paulo + Segurança Eletrônica
+                </h1>
+<p class="text-lg text-on-surface-variant font-medium leading-relaxed max-w-sm">
+                    Instalação e manutenção com atendimento rápido e solução completa.
+                </p>
+</div>
+<!-- Primary Actions -->
+<div class="flex flex-col gap-4 mt-4">
+<button class="metallic-gradient text-on-primary font-bold py-5 px-8 rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform flex justify-center items-center gap-2">
+<span class="font-label text-base tracking-wide uppercase">Solicitar Orçamento</span>
+</button>
+<button class="bg-surface-container-lowest border border-primary/40 text-primary py-5 px-8 rounded-full font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xl" data-icon="contact_support">contact_support</span>
+<span class="font-label text-base tracking-wide">Falar com Consultor</span>
+</button>
+</div>
+<!-- Bento-style Feature Grid for Mobile -->
+<div class="grid grid-cols-1 gap-3 mt-8">
+<div class="bg-surface-container-low p-5 rounded-lg border-l-4 border-primary">
+<div class="flex items-start gap-4">
+<div class="bg-surface-container-highest p-2 rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+</div>
+<div>
+<h3 class="font-headline text-on-surface font-bold">Atendimento 24h</h3>
+<p class="text-sm text-on-surface-variant">Manutenção emergencial em toda SP.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-4 border-primary">
+<div class="flex items-start gap-4">
+<div class="bg-surface-container-highest p-2 rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="shield_with_heart">shield_with_heart</span>
+</div>
+<div>
+<h3 class="font-headline text-on-surface font-bold">Garantia Total</h3>
+<p class="text-sm text-on-surface-variant">Segurança e peças originais de fábrica.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-4 border-primary">
+<div class="flex items-start gap-4">
+<div class="bg-surface-container-highest p-2 rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="settings_remote">settings_remote</span>
+</div>
+<div>
+<h3 class="font-headline text-on-surface font-bold">Automação Inteligente</h3>
+<p class="text-sm text-on-surface-variant">Controle total pelo seu smartphone.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- WhatsApp Floating Action -->
+<div class="fixed bottom-24 right-6 z-50">
+<a class="bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-xl shadow-[#25D366]/30 active:scale-90 transition-transform" href="#">
+<svg class="w-8 h-8 fill-current" viewbox="0 0 24 24">
+<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.888 11.888-11.888 3.176 0 6.161 1.237 8.404 3.48s3.48 5.228 3.48 8.404c0 6.557-5.331 11.888-11.887 11.888-2.01 0-3.986-.511-5.741-1.483l-6.243 1.808zm6.086-5.309l.395.234c1.46.868 3.144 1.326 4.873 1.326 5.105 0 9.259-4.155 9.259-9.259 0-2.473-.962-4.798-2.71-6.546s-4.074-2.71-6.547-2.71c-5.105 0-9.26 4.155-9.26 9.259 0 1.634.428 3.234 1.239 4.647l.257.447-1.011 3.696 3.792-1.094zm9.215-6.096c-.244-.122-1.444-.712-1.668-.794-.223-.081-.387-.122-.55.122-.162.244-.63.794-.772.956-.142.163-.284.183-.528.061-.244-.122-1.029-.38-1.959-1.209-.724-.647-1.213-1.445-1.354-1.689-.142-.244-.015-.376.107-.497.111-.11.244-.285.366-.427.122-.142.162-.244.244-.406.081-.162.04-.305-.02-.426-.061-.122-.55-1.326-.752-1.815-.197-.474-.397-.41-.55-.417l-.467-.006c-.162 0-.427.061-.65.305-.223.244-.854.834-.854 2.035 0 1.201.874 2.36 1.015 2.544.142.183 1.72 2.626 4.167 3.682.582.251 1.036.401 1.391.514.585.186 1.117.16 1.537.098.468-.069 1.444-.59 1.648-1.159.203-.569.203-1.057.142-1.159-.061-.101-.223-.162-.468-.284z"></path>
+</svg>
+</a>
+</div>
+</main>
+<!-- Navigation Shell Mobile (Bottom) -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#061423]/90 backdrop-blur-xl border-t border-outline-variant/10 flex justify-around items-center px-4 py-3 h-16">
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="text-[10px]">Segurança</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="text-[10px]">Serviços</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-[10px]">Orçamento</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px]">Cliente</span>
+</div>
+</nav>
+<!-- Simple Mobile Footer -->
+<footer class="bg-surface-container-low py-12 px-6 pb-24 text-center">
+<span class="text-primary font-headline font-bold text-lg">Serralheria Nova Aliança</span>
+<p class="text-on-surface-variant text-xs mt-2 leading-relaxed font-body">
+            © 2024 Automação &amp; Seguranca Eletrônica. <br/> Todos os direitos reservados.
+        </p>
+<div class="flex justify-center gap-4 mt-6 text-on-surface-variant text-xs">
+<span>Privacidade</span>
+<span>Termos</span>
+<span>Suporte</span>
+</div>
+</footer>
+</body></html>

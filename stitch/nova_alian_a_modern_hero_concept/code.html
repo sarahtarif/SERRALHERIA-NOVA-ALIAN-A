@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#343a41",
+              "tertiary-fixed": "#cde6f4",
+              "surface-container-high": "#252b31",
+              "tertiary": "#b1cad7",
+              "surface-container": "#1a2027",
+              "surface-tint": "#a9c7ff",
+              "on-secondary-container": "#6a4e00",
+              "secondary-container": "#fabd00",
+              "error": "#ffb4ab",
+              "on-tertiary-fixed-variant": "#334a55",
+              "outline-variant": "#434750",
+              "primary-fixed-dim": "#a9c7ff",
+              "on-tertiary": "#1c333e",
+              "surface": "#0e141a",
+              "on-primary-container": "#74a6f8",
+              "on-error-container": "#ffdad6",
+              "on-background": "#dde3ec",
+              "on-primary-fixed-variant": "#00468c",
+              "on-surface-variant": "#c3c6d1",
+              "on-surface": "#dde3ec",
+              "secondary-fixed": "#ffdf9e",
+              "surface-container-lowest": "#090f15",
+              "on-primary-fixed": "#001b3d",
+              "on-tertiary-container": "#91a9b5",
+              "surface-dim": "#0e141a",
+              "on-secondary-fixed-variant": "#5b4300",
+              "inverse-primary": "#225eab",
+              "tertiary-container": "#273e48",
+              "error-container": "#93000a",
+              "primary": "#a9c7ff",
+              "primary-fixed": "#d6e3ff",
+              "on-secondary": "#3f2e00",
+              "on-secondary-fixed": "#261a00",
+              "surface-variant": "#2f353c",
+              "background": "#0e141a",
+              "tertiary-fixed-dim": "#b1cad7",
+              "primary-container": "#003a76",
+              "surface-container-highest": "#2f353c",
+              "secondary-fixed-dim": "#fabd00",
+              "on-tertiary-fixed": "#051e28",
+              "secondary": "#ffdf9e",
+              "outline": "#8d919b",
+              "inverse-on-surface": "#2b3138",
+              "on-error": "#690005",
+              "on-primary": "#003063",
+              "inverse-surface": "#dde3ec",
+              "surface-container-low": "#161c22"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(26, 32, 39, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-2xl shadow-blue-900/20">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold tracking-tighter text-blue-200 dark:text-blue-200 font-['Space_Grotesk']">
+                Nova Aliança
+            </div>
+<div class="hidden md:flex items-center gap-8 font-['Space_Grotesk'] tracking-tight">
+<a class="text-blue-200 border-b-2 border-amber-400 pb-1" href="#">Início</a>
+<a class="text-slate-400 hover:text-blue-100 transition-colors" href="#">Serviços</a>
+<a class="text-slate-400 hover:text-blue-100 transition-colors" href="#">Sobre</a>
+<a class="text-slate-400 hover:text-blue-100 transition-colors" href="#">Portfólio</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-5 py-2.5 rounded-md font-medium text-sm transition-transform active:scale-90 scale-95 hover:scale-100 shadow-lg shadow-primary/10">
+                Solicitar Orçamento
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<main class="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0">
+<img alt="Modern luxury residence with automated minimalist gate" class="w-full h-full object-cover brightness-[0.3]" data-alt="Modern minimalist house with large sleek metal automated gate at dusk with warm architectural lighting and blue hour sky background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQcVTR88ppb8q4Xs9oJ9fvcamS91IckwnRKkngWh1QioC4O4hyT2jkjxh7ROLpaKsZku6s3prsarmkn2Qbs9OEo4WcV4evQqwJeDHRKr_xnlHUNDFujKwva5u4Ts0kT9SYDyA2IUt7YvfF4hwu7yKzuD7xVCnCFs6r8y0YaY27xlJPaCocOX_ixjfbb6L80dW1LkUSIa5bg2Z-JJBrW4oRp_hlbBVk-TEF9vC6FEVi_ennWIf9LvjUgxXvvZ0vUNDmgAsrrdL-bigo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-surface via-surface/20 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16">
+<!-- Hero Content -->
+<div class="lg:col-span-7 space-y-8">
+<div>
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label text-xs font-semibold tracking-wide uppercase mb-6">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+                        +15 anos em São Paulo
+                    </span>
+<h1 class="font-headline text-5xl md:text-7xl font-bold tracking-tighter text-on-surface leading-[1.1] mb-6">
+                        Automação de Portões em <span class="text-secondary-fixed">São Paulo</span> + Segurança Eletrônica
+                    </h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-2xl leading-relaxed">
+                        Instalação e manutenção com atendimento rápido e solução completa (motor, fotocélula, trava, interfone e câmeras).
+                    </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-4 rounded-md font-headline font-bold text-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-primary/20">
+                        Solicitar Orçamento
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="border border-outline-variant/30 hover:bg-white/5 text-primary px-8 py-4 rounded-md font-headline font-bold text-lg transition-all">
+                        Nossos Serviços
+                    </button>
+</div>
+</div>
+<!-- Trust Grid / Bento Style -->
+<div class="lg:col-span-5 grid grid-cols-2 gap-4">
+<div class="glass-panel p-6 rounded-xl border border-outline-variant/10 hover:border-primary/20 transition-all group">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+</div>
+<h3 class="font-headline font-bold text-lg mb-1">Anti-Esmagamento</h3>
+<p class="text-xs text-on-surface-variant leading-snug">Sensores inteligentes para proteção total de veículos e pedestres.</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border border-outline-variant/10 hover:border-primary/20 transition-all group">
+<div class="w-12 h-12 rounded-lg bg-secondary-container/10 flex items-center justify-center mb-4 group-hover:bg-secondary-container/20 transition-colors">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="bolt">bolt</span>
+</div>
+<h3 class="font-headline font-bold text-lg mb-1">Contra Surtos</h3>
+<p class="text-xs text-on-surface-variant leading-snug">Proteção eletrônica avançada contra picos de energia e raios.</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border border-outline-variant/10 hover:border-primary/20 transition-all group">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+</div>
+<h3 class="font-headline font-bold text-lg mb-1">Garantia</h3>
+<p class="text-xs text-on-surface-variant leading-snug">Equipamentos certificados com garantia estendida de fábrica.</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border border-outline-variant/10 hover:border-primary/20 transition-all group">
+<div class="w-12 h-12 rounded-lg bg-secondary-container/10 flex items-center justify-center mb-4 group-hover:bg-secondary-container/20 transition-colors">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="support_agent">support_agent</span>
+</div>
+<h3 class="font-headline font-bold text-lg mb-1">Suporte 24h</h3>
+<p class="text-xs text-on-surface-variant leading-snug">Atendimento emergencial prioritário para toda Grande SP.</p>
+</div>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+<span class="text-[10px] font-label tracking-widest uppercase">Explorar</span>
+<div class="w-px h-12 bg-gradient-to-b from-primary to-transparent"></div>
+</div>
+</main>
+<!-- Floating WhatsApp -->
+<a class="fixed bottom-8 right-8 z-50 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-transform" href="#">
+<svg fill="white" height="32" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
+<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.316 1.592 5.43 0 9.856-4.426 9.858-9.855.002-5.43-4.425-9.856-9.853-9.856-2.637 0-5.112 1.028-6.97 2.887-1.857 1.858-2.883 4.332-2.885 6.968-.002 2.153.599 3.733 1.714 5.297l-1.014 3.704 3.834-.987zm11.367-5.4c-.33-.165-1.951-.963-2.254-1.074-.303-.11-.523-.165-.743.165-.22.33-.853 1.074-1.046 1.302-.192.228-.385.257-.715.092-.33-.165-1.393-.513-2.653-1.637-.98-.874-1.641-1.954-1.833-2.284-.192-.33-.02-.508.145-.671.148-.147.33-.385.495-.578.165-.192.22-.33.33-.55.11-.22.055-.413-.028-.578-.083-.165-.743-1.789-1.018-2.454-.267-.647-.538-.559-.743-.569-.193-.01-.413-.012-.633-.012s-.578.083-.88.413c-.303.33-1.155 1.128-1.155 2.75s1.183 3.19 1.348 3.41c.165.22 2.328 3.555 5.637 4.983.787.34 1.4.542 1.879.694.791.251 1.512.215 2.08.13.634-.094 1.951-.798 2.226-1.568.275-.77.275-1.43.193-1.568-.083-.138-.303-.22-.633-.385z"></path>
+</svg>
+</a>
+<!-- Footer -->
+<footer class="bg-slate-950 dark:bg-slate-950 w-full border-t border-white/5">
+<div class="flex flex-col md:flex-row justify-between items-center py-8 px-6 max-w-7xl mx-auto font-['Manrope'] text-sm">
+<div class="text-lg font-bold text-blue-200 mb-4 md:mb-0">Nova Aliança</div>
+<div class="text-slate-500 order-last md:order-none">
+                © 2024 Nova Aliança. Segurança e Automação de Alto Padrão.
+            </div>
+<div class="flex gap-6 mb-4 md:mb-0">
+<a class="text-slate-500 hover:text-blue-200 transition-colors" href="#">Privacidade</a>
+<a class="text-slate-500 hover:text-blue-200 transition-colors" href="#">Termos</a>
+<a class="text-slate-500 hover:text-blue-200 transition-colors" href="#">Contato</a>
+</div>
+</div>
+</footer>
+</body></html>
