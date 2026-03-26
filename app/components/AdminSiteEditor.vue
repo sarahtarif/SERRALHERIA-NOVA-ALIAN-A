@@ -229,4 +229,5 @@ function isDirty(chave: string): boolean {
 
     </div>
   </div>
+  <AdminReportarErro aba="Editor do Site" />
 </template>

@@ -745,4 +745,5 @@ onMounted(() => fetchItems())
       </div>
     </div>
   </Teleport>
+  <AdminReportarErro aba="Portfólio" />
 </template>

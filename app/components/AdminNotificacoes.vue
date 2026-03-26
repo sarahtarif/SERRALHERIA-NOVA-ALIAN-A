@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
+import AdminReportarErro from '~/components/AdminReportarErro.vue'
 
 const supabase = useSupabase()
 
@@ -278,6 +279,15 @@ onMounted(carregar)
       <div class="rounded-2xl p-4 space-y-3" style="background:#0d1526; border:1px solid rgba(255,255,255,0.07);">
         <p class="text-sm font-semibold text-white">Gmail para envio</p>
         <p class="text-xs" style="color:#64748b;">Use uma Senha de App do Google (não a senha normal)</p>
+        <!-- Alerta de não alterar -->
+        <div class="flex items-start gap-2 px-3 py-2.5 rounded-xl" style="background:rgba(245,166,35,0.07); border:1px solid rgba(245,166,35,0.2);">
+          <svg class="w-4 h-4 shrink-0 mt-0.5" style="color:#f5a623;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          </svg>
+          <p class="text-xs leading-relaxed" style="color:#fbbf24;">
+            <strong>Atenção:</strong> Não altere o Gmail ou a Senha de App sem necessidade. Se forem apagados ou trocados incorretamente, os disparos de email vão parar de funcionar. Guarde as credenciais em local seguro antes de qualquer alteração.
+          </p>
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs text-gray-400 mb-1">Email Gmail</label>
@@ -355,6 +365,8 @@ onMounted(carregar)
           Para disparos automáticos nos horários configurados, configure um cron job externo (ex: cron-job.org) apontando para <code class="px-1 py-0.5 rounded" style="background:rgba(99,102,241,0.2);">POST /api/notificacoes/disparar</code> com o header <code class="px-1 py-0.5 rounded" style="background:rgba(99,102,241,0.2);">Authorization: Bearer internal-job-XXXXXXXX</code>. Use o botão "Testar" para disparar manualmente.
         </p>
       </div>
+
+      <AdminReportarErro aba="Notificações" />
 
     </div>
   </div>
