@@ -73,6 +73,15 @@ export function useAdminAuth() {
         return false
       }
 
+      // Registra sessão em background (dispositivo, IP, localização)
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) {
+        $fetch('/api/admin/registrar-sessao', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + session.access_token },
+        }).catch(() => { /* silencioso — não bloqueia o login */ })
+      }
+
       await router.push('/gestao-na')
       return true
     } catch {
