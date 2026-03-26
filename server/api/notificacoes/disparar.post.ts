@@ -51,11 +51,13 @@ export default defineEventHandler(async (event) => {
   }
 
   // Verifica se o horário atual bate com algum horário configurado (tolerância de 10 min)
+  // Usa horário de Brasília (UTC-3) independente do fuso do servidor
   const agora = new Date()
-  const horaAtual = agora.getHours().toString().padStart(2, '0') + ':' + agora.getMinutes().toString().padStart(2, '0')
+  const agoraSP = new Date(agora.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }))
+  const horaAtual = agoraSP.getHours().toString().padStart(2, '0') + ':' + agoraSP.getMinutes().toString().padStart(2, '0')
   const horariosBatendo = (cfg.horarios_envio as string[]).some(h => {
     const [hh, mm] = h.split(':').map(Number)
-    const diffMin = Math.abs((agora.getHours() * 60 + agora.getMinutes()) - (hh * 60 + mm))
+    const diffMin = Math.abs((agoraSP.getHours() * 60 + agoraSP.getMinutes()) - (hh * 60 + mm))
     return diffMin <= 10
   })
 
@@ -66,7 +68,7 @@ export default defineEventHandler(async (event) => {
     return { ok: false, message: 'Fora do horário configurado (' + horaAtual + '). Horários: ' + (cfg.horarios_envio as string[]).join(', ') }
   }
 
-  const hoje = new Date()
+  const hoje = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }))
   hoje.setHours(0, 0, 0, 0)
 
   // Busca agendamentos nos próximos N dias

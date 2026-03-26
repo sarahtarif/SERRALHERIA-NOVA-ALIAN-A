@@ -16,15 +16,40 @@ interface MediaStats {
   percentBanco: number | null
 }
 
+interface TableStat {
+  tablename: string
+  total_bytes: number
+  table_bytes: number
+  index_bytes: number
+  row_count: number
+}
+
+const TABLE_LABELS: Record<string, string> = {
+  solicitacoes: 'Solicitações',
+  portfolio: 'Portfólio',
+  convites: 'Convites',
+  users: 'Clientes (users)',
+  admins: 'Administradores',
+  agendamentos: 'Agendamentos',
+  notification_config: 'Config. Notificações',
+  clientes_avulsos: 'Clientes Avulsos',
+  servicos_catalogo: 'Catálogo de Serviços',
+  site_config: 'Config. do Site',
+}
+
 const supabase = useSupabase()
 const loading = ref(true)
 const stats = ref<MediaStats | null>(null)
 const error = ref(false)
+const tables = ref<TableStat[]>([])
+const dbTotalBytes = ref(0)
+const showTables = ref(false)
 
 async function carregar() {
   loading.value = true
   error.value = false
   try {
+    // Mídias via RPC existente
     const { data, error: rpcError } = await supabase.rpc('get_media_usage_stats')
     if (rpcError || !data) throw new Error('rpc failed')
 
@@ -50,6 +75,13 @@ async function carregar() {
       bancoTotalMB: bBanco / (1024 * 1024),
       percentBanco: Math.min((bBanco / LIMIT) * 100, 100),
     }
+
+    // Tamanho por tabela
+    const { data: tablesData } = await supabase.rpc('get_tables_size')
+    if (tablesData) {
+      tables.value = tablesData as TableStat[]
+      dbTotalBytes.value = bBanco
+    }
   } catch {
     error.value = true
   } finally {
@@ -61,6 +93,20 @@ function fmt(mb: number): string {
   if (mb < 1) return (mb * 1024).toFixed(1) + ' KB'
   if (mb < 1024) return mb.toFixed(2) + ' MB'
   return (mb / 1024).toFixed(2) + ' GB'
+}
+
+function fmtBytes(bytes: number): string {
+  const mb = bytes / (1024 * 1024)
+  return fmt(mb)
+}
+
+function tablePercent(bytes: number): number {
+  if (!dbTotalBytes.value) return 0
+  return Math.min((bytes / dbTotalBytes.value) * 100, 100)
+}
+
+function tableLabel(name: string): string {
+  return TABLE_LABELS[name] ?? name
 }
 
 const corBarra = computed(() => {
@@ -76,6 +122,8 @@ const corBarraMidia = computed(() => {
   if (p >= 60) return '#f59e0b'
   return '#818cf8'
 })
+
+const TABLE_COLORS = ['#6366f1', '#34d399', '#f59e0b', '#f87171', '#818cf8', '#38bdf8', '#a78bfa', '#fb923c', '#4ade80', '#e879f9']
 
 onMounted(carregar)
 </script>
@@ -208,6 +256,55 @@ onMounted(carregar)
             <span class="text-xs" style="color:#94a3b8;">Certificados A1</span>
           </div>
           <span class="text-xs font-medium" style="color:#e2e8f0;">{{ fmt(stats.certs.mb) }}</span>
+        </div>
+      </div>
+
+      <!-- Divisor -->
+      <div style="border-top:1px solid rgba(255,255,255,0.05);"/>
+
+      <!-- Detalhamento por tabela -->
+      <div class="space-y-2">
+        <button
+          class="w-full flex items-center justify-between py-0.5"
+          @click="showTables = !showTables"
+        >
+          <p class="text-[10px] font-semibold uppercase tracking-wider" style="color:#475569;">Tabelas do banco</p>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10px]" style="color:#475569;">{{ fmtBytes(dbTotalBytes) }} total</span>
+            <svg
+              class="w-3.5 h-3.5 transition-transform duration-200"
+              :style="showTables ? 'transform:rotate(180deg);color:#6366f1;' : 'color:#475569;'"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </button>
+
+        <div v-if="showTables" class="space-y-1.5">
+          <div
+            v-for="(t, i) in tables"
+            :key="t.tablename"
+            class="rounded-xl overflow-hidden"
+            style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);"
+          >
+            <div class="px-3 py-2 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-2 h-2 rounded-full shrink-0" :style="{ background: TABLE_COLORS[i % TABLE_COLORS.length] }"/>
+                <span class="text-xs truncate" style="color:#94a3b8;">{{ tableLabel(t.tablename) }}</span>
+              </div>
+              <div class="flex items-center gap-3 shrink-0">
+                <span class="text-[10px]" style="color:#475569;">{{ t.row_count > 0 ? t.row_count + ' reg.' : '—' }}</span>
+                <span class="text-xs font-medium" style="color:#e2e8f0;">{{ fmtBytes(t.total_bytes) }}</span>
+              </div>
+            </div>
+            <div class="h-0.5 w-full" style="background:rgba(255,255,255,0.04);">
+              <div
+                class="h-full transition-all duration-500"
+                :style="{ width: Math.max(tablePercent(t.total_bytes), 0.5) + '%', background: TABLE_COLORS[i % TABLE_COLORS.length] }"
+              />
+            </div>
+          </div>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
 import AdminInfoBox from '~/components/AdminInfoBox.vue'
@@ -44,6 +44,90 @@ const novoClienteSucesso = ref('')
 const novoClienteLink = ref('')
 const enviandoConvite = ref(false)
 
+// Convites
+const podeConvidar = computed(() => adminRole.value === 'super_admin' || adminRole.value === 'editor')
+type ConviteStatus = 'pendente' | 'aceito' | 'expirado'
+interface Convite {
+  id: string
+  token: string
+  usado: boolean
+  expires_at: string
+  created_at: string
+  status: ConviteStatus
+  clientes_avulsos: { id: string; nome: string; email: string | null; user_id: string | null } | null
+}
+const abaAtiva = ref<'clientes' | 'convites'>('clientes')
+const convites = ref<Convite[]>([])
+const loadingConvites = ref(false)
+const novoClienteLoading = ref(false)
+const linkCopiado = ref(false)
+
+async function carregarConvites(): Promise<void> {
+  loadingConvites.value = true
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = session?.access_token ? { Authorization: 'Bearer ' + session.access_token } : {}
+    const res = await $fetch<{ convites: Convite[] }>('/api/convites/listar', { headers })
+    convites.value = res.convites
+  } catch (e) {
+    console.error('[AdminClientes] convites error:', e)
+  } finally {
+    loadingConvites.value = false
+  }
+}
+
+async function enviarConviteEmail(): Promise<void> {
+  novoClienteErro.value = ''
+  if (!novoClienteForm.value.nome.trim() || !novoClienteForm.value.email.trim()) {
+    novoClienteErro.value = 'Nome e email são obrigatórios.'
+    return
+  }
+  novoClienteLoading.value = true
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = session?.access_token ? { Authorization: 'Bearer ' + session.access_token } : {}
+    const res = await $fetch<{ ok: boolean; link: string; emailEnviado: boolean }>('/api/convites/enviar-email', {
+      method: 'POST',
+      headers,
+      body: { nome: novoClienteForm.value.nome.trim(), email: novoClienteForm.value.email.trim() },
+    })
+    novoClienteLink.value = res.link
+    novoClienteSucesso.value = res.emailEnviado
+      ? 'Convite enviado para ' + novoClienteForm.value.email + '!'
+      : 'Cadastro criado. Copie o link abaixo e envie manualmente.'
+    await carregarConvites()
+  } catch (e: unknown) {
+    novoClienteErro.value = (e as { data?: { message?: string } })?.data?.message ?? 'Erro ao enviar convite.'
+  } finally {
+    novoClienteLoading.value = false
+  }
+}
+
+async function gerarLink(): Promise<void> {
+  novoClienteErro.value = ''
+  if (!novoClienteForm.value.nome.trim() || !novoClienteForm.value.email.trim()) {
+    novoClienteErro.value = 'Nome e email são obrigatórios.'
+    return
+  }
+  novoClienteLoading.value = true
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = session?.access_token ? { Authorization: 'Bearer ' + session.access_token } : {}
+    const res = await $fetch<{ ok: boolean; link: string }>('/api/convites/gerar-link', {
+      method: 'POST',
+      headers,
+      body: { nome: novoClienteForm.value.nome.trim(), email: novoClienteForm.value.email.trim() },
+    })
+    novoClienteLink.value = res.link
+    novoClienteSucesso.value = 'Link gerado! Copie e envie manualmente para o cliente.'
+    await carregarConvites()
+  } catch (e: unknown) {
+    novoClienteErro.value = (e as { data?: { message?: string } })?.data?.message ?? 'Erro ao gerar link.'
+  } finally {
+    novoClienteLoading.value = false
+  }
+}
+
 async function adicionarCliente() {
   novoClienteErro.value = ''
   novoClienteSucesso.value = ''
@@ -73,9 +157,46 @@ async function adicionarCliente() {
   }
 }
 
-function copiarLink() {
-  if (novoClienteLink.value) navigator.clipboard.writeText(novoClienteLink.value)
+function copiarLink(link?: string): void {
+  const target = link ?? novoClienteLink.value
+  if (target) {
+    navigator.clipboard.writeText(target)
+    linkCopiado.value = true
+    setTimeout(() => { linkCopiado.value = false }, 2000)
+  }
 }
+
+async function revogarConvite(conviteId: string): Promise<void> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = session?.access_token ? { Authorization: 'Bearer ' + session.access_token } : {}
+    await ('/api/convites/revogar', { method: 'POST', headers, body: { conviteId } })
+    convites.value = convites.value.map(c => c.id === conviteId ? { ...c, usado: true, status: 'expirado' as ConviteStatus } : c)
+  } catch (e) {
+    console.error('[AdminClientes] revogar error:', e)
+  }
+}
+
+async function reenviarConvite(convite: Convite): Promise<void> {
+  if (!convite.clientes_avulsos) return
+  novoClienteForm.value = { nome: convite.clientes_avulsos.nome, email: convite.clientes_avulsos.email ?? '' }
+  novoClienteErro.value = ''
+  novoClienteSucesso.value = ''
+  novoClienteLink.value = ''
+  adicionando.value = true
+}
+
+function conviteStatusStyle(s: ConviteStatus): string {
+  if (s === 'aceito') return 'background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3);'
+  if (s === 'expirado') return 'background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);'
+  return 'background:rgba(234,179,8,0.15);color:#facc15;border:1px solid rgba(234,179,8,0.3);'
+}
+function conviteStatusLabel(s: ConviteStatus): string {
+  if (s === 'aceito') return 'Aceito'
+  if (s === 'expirado') return 'Expirado'
+  return 'Pendente'
+}
+function formatDateShort(iso: string): string { return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' }) }
 
 function abrirEdicao() {
   if (!selected.value) return
@@ -140,6 +261,7 @@ onMounted(async () => {
   if (error) console.error('[AdminClientes] fetch error:', error.message)
   clientes.value = (data ?? []) as Cliente[]
   loading.value = false
+  await carregarConvites()
 })
 
 async function selectCliente(c: Cliente): Promise<void> {
@@ -179,9 +301,35 @@ function hasMedia(s: Solicitacao) { return s.imagens.length > 0 || s.videos.leng
     </div>
 
 <div class="px-4 py-4 border-b border-white/5 flex items-center justify-between shrink-0">
-      <h2 class="text-base font-semibold text-white">Clientes</h2>
-      <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-medium">{{ clientes.length }}</span>
+      <div class="flex items-center gap-3">
+        <h2 class="text-base font-semibold text-white">Clientes</h2>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-medium">{{ clientes.length }}</span>
+      </div>
+      <button
+        v-if="podeConvidar"
+        @click="adicionando = true; novoClienteForm.nome = ''; novoClienteForm.email = ''; novoClienteErro = ''; novoClienteSucesso = ''; novoClienteLink = ''"
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:brightness-110"
+        style="background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Novo Cliente
+      </button>
     </div>
+
+    <!-- Abas -->
+    <div class="flex shrink-0 px-4 pt-3 gap-1" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+      <button
+        @click="abaAtiva = 'clientes'"
+        class="px-3 pb-2.5 text-xs font-medium transition-colors border-b-2"
+        :style="abaAtiva === 'clientes' ? 'color:#a5b4fc;border-color:#6366f1;' : 'color:#475569;border-color:transparent;'"
+      >Cadastrados ({{ clientes.length }})</button>
+      <button
+        @click="abaAtiva = 'convites'; carregarConvites()"
+        class="px-3 pb-2.5 text-xs font-medium transition-colors border-b-2"
+        :style="abaAtiva === 'convites' ? 'color:#a5b4fc;border-color:#6366f1;' : 'color:#475569;border-color:transparent;'"
+      >Convites ({{ convites.length }})</button>
+    </div>
+    <div v-show="abaAtiva === 'clientes'" class="flex-1 flex flex-col overflow-hidden">
     <div v-if="loading" class="flex-1 flex items-center justify-center">
       <svg class="w-6 h-6 text-indigo-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
     </div>
@@ -258,6 +406,54 @@ function hasMedia(s: Solicitacao) { return s.imagens.length > 0 || s.videos.leng
         </div>
       </div>
     </div>
+
+    </div><!-- end clientes wrapper -->
+
+    <!-- Aba: Convites -->
+    <div v-if="abaAtiva === 'convites'" class="flex-1 flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 shrink-0" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <p class="text-xs font-semibold uppercase tracking-wider" style="color:#6366f1;">Convites enviados</p>
+        <button @click="carregarConvites" class="text-xs px-2 py-1 rounded-lg" style="color:#64748b;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);">Atualizar</button>
+      </div>
+      <div v-if="loadingConvites" class="flex-1 flex items-center justify-center">
+        <svg class="w-5 h-5 text-indigo-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
+      </div>
+      <div v-else-if="!convites.length" class="flex-1 flex items-center justify-center">
+        <p class="text-sm" style="color:#475569;">Nenhum convite enviado ainda.</p>
+      </div>
+      <div v-else class="flex-1 overflow-y-auto divide-y divide-white/5">
+        <div v-for="c in convites" :key="c.id" class="px-4 py-3 flex items-center gap-3">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <p class="text-sm font-medium text-white truncate">{{ c.clientes_avulsos?.nome ?? '—' }}</p>
+              <span class="text-xs px-1.5 py-0.5 rounded-full shrink-0" :style="conviteStatusStyle(c.status)">{{ conviteStatusLabel(c.status) }}</span>
+            </div>
+            <p class="text-xs mt-0.5 truncate" style="color:#64748b;">{{ c.clientes_avulsos?.email ?? '—' }}</p>
+            <p class="text-xs mt-0.5" style="color:#334155;">Expira {{ formatDateShort(c.expires_at) }}</p>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button
+              v-if="c.status === 'pendente'"
+              @click="copiarLink('/convite?token=' + c.token)"
+              class="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all"
+              style="background:rgba(99,102,241,0.12);color:#a5b4fc;border:1px solid rgba(99,102,241,0.2);"
+            >{{ linkCopiado ? 'Copiado!' : 'Copiar link' }}</button>
+            <button
+              v-if="c.status === 'pendente'"
+              @click="reenviarConvite(c)"
+              class="px-2.5 py-1.5 rounded-lg text-xs font-medium"
+              style="background:rgba(52,211,153,0.1);color:#6ee7b7;border:1px solid rgba(52,211,153,0.2);"
+            >Reenviar</button>
+            <button
+              v-if="c.status === 'pendente' && podeConvidar"
+              @click="revogarConvite(c.id)"
+              class="px-2.5 py-1.5 rounded-lg text-xs font-medium"
+              style="background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.2);"
+            >Revogar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <Teleport to="body"><Transition name="lb-fade"><div v-if="confirmandoExclusao" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);" @click.self="confirmandoExclusao = null"><div class="w-full max-w-sm rounded-2xl p-6 space-y-4" style="background:#0d1526;border:1px solid rgba(239,68,68,0.3);"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(239,68,68,0.15);"><svg class="w-5 h-5" style="color:#f87171;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div><p class="text-sm font-semibold text-white">Excluir cliente?</p><p class="text-xs mt-0.5" style="color:#64748b;">Esta ação não pode ser desfeita.</p></div></div><div v-if="erroExclusao" class="px-3 py-2.5 rounded-xl text-xs" style="background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2);">{{ erroExclusao }}</div><div class="flex gap-3"><button @click="confirmandoExclusao = null; erroExclusao = ''" class="flex-1 py-2.5 rounded-xl text-sm font-medium" style="background:rgba(255,255,255,0.05);color:#64748b;border:1px solid rgba(255,255,255,0.06);">Cancelar</button><button @click="excluirCliente(confirmandoExclusao!)" :disabled="excluindo" class="flex-1 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50" style="background:rgba(239,68,68,0.8);color:#fff;">{{ excluindo ? 'Excluindo...' : 'Sim, excluir' }}</button></div></div></div></Transition></Teleport>
   <Teleport to="body"><Transition name="lb-fade"><div v-if="editando" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);" @click.self="editando = false"><div class="w-full max-w-lg rounded-2xl overflow-hidden flex flex-col max-h-[90vh]" style="background:#0d1526;border:1px solid rgba(255,255,255,0.08);"><div class="flex items-center justify-between px-5 py-4" style="border-bottom:1px solid rgba(255,255,255,0.06);"><h3 class="text-base font-semibold text-white">Editar cliente</h3><button @click="editando = false" style="color:#64748b;"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button></div><div class="overflow-y-auto px-5 py-4 space-y-3 flex-1"><div v-if="erroEdit" class="px-3 py-2.5 rounded-xl text-xs" style="background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2);">{{ erroEdit }}</div><div class="grid grid-cols-2 gap-3"><div class="col-span-2"><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Nome completo</label><input v-model="editForm.full_name" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div class="col-span-2"><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Telefone</label><input v-model="editForm.phone" type="tel" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">CEP</label><input v-model="editForm.cep" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Bairro</label><input v-model="editForm.neighborhood" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div class="col-span-2"><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Rua</label><input v-model="editForm.street" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Número</label><input v-model="editForm.number" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Complemento</label><input v-model="editForm.complement" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Cidade</label><input v-model="editForm.city" type="text" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div><div><label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Estado</label><input v-model="editForm.state" type="text" maxlength="2" placeholder="SP" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none uppercase" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" /></div></div></div><div class="px-5 py-4 flex gap-3" style="border-top:1px solid rgba(255,255,255,0.06);"><button @click="editando = false" class="flex-1 py-2.5 rounded-xl text-sm font-medium" style="background:rgba(255,255,255,0.05);color:#64748b;border:1px solid rgba(255,255,255,0.06);">Cancelar</button><button @click="salvarEdicao" :disabled="saving" class="flex-1 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50" style="background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;">{{ saving ? 'Salvando...' : 'Salvar alterações' }}</button></div></div></div></Transition></Teleport>
@@ -304,18 +500,25 @@ function hasMedia(s: Solicitacao) { return s.imagens.length > 0 || s.videos.leng
                   <button
                     class="px-3 py-2 rounded-xl text-xs font-medium transition-all"
                     style="background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.25);"
-                    @click="copiarLink"
-                  >Copiar</button>
+                    @click="copiarLink(novoClienteLink)"
+                  >{{ linkCopiado ? "Copiado!" : "Copiar" }}</button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="px-5 py-4 flex gap-3" style="border-top:1px solid rgba(255,255,255,0.06);">
-            <button @click="adicionando = false; novoClienteSucesso = ''; novoClienteLink = ''" class="flex-1 py-2.5 rounded-xl text-sm font-medium" style="background:rgba(255,255,255,0.05);color:#64748b;border:1px solid rgba(255,255,255,0.06);">
+          <div class="px-5 py-4 space-y-2" style="border-top:1px solid rgba(255,255,255,0.06);">
+            <div v-if="!novoClienteSucesso" class="flex gap-2">
+              <button @click="enviarConviteEmail" :disabled="novoClienteLoading" class="flex-1 py-2.5 rounded-xl text-xs font-semibold disabled:opacity-50 flex items-center justify-center gap-1.5" style="background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                {{ novoClienteLoading ? 'Aguarde...' : 'Enviar por email' }}
+              </button>
+              <button @click="gerarLink" :disabled="novoClienteLoading" class="flex-1 py-2.5 rounded-xl text-xs font-semibold disabled:opacity-50 flex items-center justify-center gap-1.5" style="background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3);">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                Gerar link
+              </button>
+            </div>
+            <button @click="adicionando = false; novoClienteSucesso = ''; novoClienteLink = ''" class="w-full py-2.5 rounded-xl text-sm font-medium" style="background:rgba(255,255,255,0.05);color:#64748b;border:1px solid rgba(255,255,255,0.06);">
               {{ novoClienteSucesso ? 'Fechar' : 'Cancelar' }}
-            </button>
-            <button v-if="!novoClienteSucesso" @click="adicionarCliente" :disabled="enviandoConvite" class="flex-1 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50" style="background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;">
-              {{ enviandoConvite ? 'Enviando...' : 'Enviar convite' }}
             </button>
           </div>
         </div>
