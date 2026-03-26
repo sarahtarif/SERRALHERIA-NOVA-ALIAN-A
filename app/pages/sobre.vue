@@ -7,6 +7,9 @@
 
     <main class="pt-20">
 
+      <!-- Âncora para scroll -->
+      <div id="sobre" style="position:absolute;margin-top:-80px;pointer-events:none;" aria-hidden="true"/>
+
       <!-- Hero -->
       <section class="relative py-24 px-4 overflow-hidden bg-surface-container-low">
         <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary-container/10 pointer-events-none" />

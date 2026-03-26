@@ -1,63 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useRuntimeConfig } from '#app'
+import { useNavigation } from '~/composables/useNavigation'
 
-const router = useRouter()
-const config = useRuntimeConfig()
+const { goHome, goProjetos, goServicos, goOrcamento, goCliente } = useNavigation()
 const active = ref<string>('home')
 
-// Scroll suave para uma seção pelo ID
-function scrollTo(id: string): void {
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-}
-
-function goHome(): void {
-  active.value = 'home'
-  // Se não estiver na home, navega primeiro
-  if (router.currentRoute.value.path !== '/') {
-    router.push('/').then(() => {
-      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
-    })
-  } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-}
-
-function goProjetos(): void {
-  active.value = 'projetos'
-  if (router.currentRoute.value.path !== '/') {
-    router.push('/').then(() => setTimeout(() => scrollTo('projetos'), 200))
-  } else {
-    scrollTo('projetos')
-  }
-}
-
-function goServicos(): void {
-  active.value = 'servicos'
-  if (router.currentRoute.value.path !== '/') {
-    router.push('/').then(() => setTimeout(() => scrollTo('services-grid'), 200))
-  } else {
-    scrollTo('services-grid')
-  }
-}
-
-function goOrcamento(): void {
-  active.value = 'orcamento'
-  const numero = config.public.whatsappNumber as string
-  const msg = encodeURIComponent('Olá, gostaria de solicitar um orçamento.')
-  window.open('https://wa.me/' + numero + '?text=' + msg, '_blank')
-}
-
-function goCliente(): void {
-  active.value = 'cliente'
-  router.push('/login')
-}
-
-// Atualiza item ativo conforme scroll
 function onScroll(): void {
   const y = window.scrollY
   if (y < 100) { active.value = 'home'; return }
