@@ -1,15 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = 'https://lfznsbvruvjnugyzfyiw.supabase.co'
-const SUPABASE_KEY = 'sb_publishable_Ii98PzbLuXnKz5tLgsUoTQ_K09D-nKO'
-
 // Singleton — evita múltiplas instâncias do GoTrueClient
 let client: SupabaseClient | null = null
+let clientUrl: string | null = null
 
 export function useSupabase(): SupabaseClient {
-  if (!client) {
-    client = createClient(SUPABASE_URL, SUPABASE_KEY)
+  const config = useRuntimeConfig()
+  const url = config.public.supabaseUrl as string
+  const key = config.public.supabaseAnonKey as string
+
+  // Recria o client se a URL mudou (ex: troca de projeto no .env)
+  if (!client || clientUrl !== url) {
+    client = createClient(url, key)
+    clientUrl = url
   }
   return client
 }

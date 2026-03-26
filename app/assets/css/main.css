@@ -1,6 +1,20 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Valores padrao das CSS variables */
+:root {
+  --color-primary: 245 166 35;
+  --color-secondary: 26 45 69;
+  --color-surface: 6 20 35;
+  --color-on-surface: 214 228 249;
+  --color-whatsapp: 37 211 102;
+}
+
+/* overflow-x clip nao cria contexto de scroll, nao bloqueia scrollIntoView */
+html, body {
+  overflow-x: clip;
+}
 
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;

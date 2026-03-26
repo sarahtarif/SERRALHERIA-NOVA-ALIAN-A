@@ -8,11 +8,14 @@ import AdminClientes from '~/components/AdminClientes.vue'
 import AdminAgendamentos from '~/components/AdminAgendamentos.vue'
 import AdminCertificadoA1 from '~/components/AdminCertificadoA1.vue'
 import AdminStorageWidget from '~/components/AdminStorageWidget.vue'
+import AdminPortfolio from '~/components/AdminPortfolio.vue'
+import AdminNotificacoes from '~/components/AdminNotificacoes.vue'
+import AdminSiteEditor from '~/components/AdminSiteEditor.vue'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 
 definePageMeta({ layout: false, middleware: ['admin-auth'] })
 
-type Section = 'home' | 'solicitacoes' | 'clientes' | 'nfe' | 'agendamentos' | 'site'
+type Section = 'home' | 'solicitacoes' | 'clientes' | 'nfe' | 'agendamentos' | 'portfolio' | 'notificacoes' | 'site' | 'editor'
 
 const { adminUser, logoutAdmin, adminRole } = useAdminAuth()
 const iframeKey = ref(0)
@@ -234,6 +237,32 @@ onUnmounted(() => {
 
           <button
             class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
+            :style="activeSection === 'portfolio'
+              ? 'background:rgba(99,102,241,0.15); color:#a5b4fc;'
+              : 'color:#64748b;'"
+            @click="navigate('portfolio')"
+          >
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Portfólio
+          </button>
+
+          <button
+            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
+            :style="activeSection === 'notificacoes'
+              ? 'background:rgba(99,102,241,0.15); color:#a5b4fc;'
+              : 'color:#64748b;'"
+            @click="navigate('notificacoes')"
+          >
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            Notificações
+          </button>
+
+          <button
+            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
             :style="activeSection === 'nfe'
               ? 'background:rgba(99,102,241,0.15); color:#a5b4fc;'
               : 'color:#64748b;'"
@@ -260,6 +289,20 @@ onUnmounted(() => {
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
             </svg>
             Ver Site
+          </button>
+
+          <!-- Editor do Site -->
+          <button
+            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
+            :style="activeSection === 'editor'
+              ? 'background:rgba(99,102,241,0.15); color:#a5b4fc;'
+              : 'color:#64748b;'"
+            @click="navigate('editor')"
+          >
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Editor do Site
           </button>
 
         </nav>
@@ -368,6 +411,40 @@ onUnmounted(() => {
                   </div>
                 </button>
 
+                <!-- Editor do Site -->
+                <button
+                  class="flex items-center gap-4 p-4 rounded-2xl text-left transition-all hover:scale-[1.02] active:scale-[0.98] sm:col-span-2"
+                  style="background:#0d1526; border:1px solid rgba(99,102,241,0.2);"
+                  @click="navigate('editor')"
+                >
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.2);">
+                    <svg class="w-5 h-5" style="color:#818cf8;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-white">Editor do Site</p>
+                    <p class="text-xs mt-0.5" style="color:#64748b;">Edite textos, cores e conteúdo — Super Admin</p>
+                  </div>
+                </button>
+
+                <!-- Portfólio -->
+                <button
+                  class="flex items-center gap-4 p-4 rounded-2xl text-left transition-all hover:scale-[1.02] active:scale-[0.98] sm:col-span-2"
+                  style="background:#0d1526; border:1px solid rgba(99,102,241,0.15);"
+                  @click="navigate('portfolio')"
+                >
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.2);">
+                    <svg class="w-5 h-5" style="color:#818cf8;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-white">Portfólio</p>
+                    <p class="text-xs mt-0.5" style="color:#64748b;">Publique fotos e vídeos dos trabalhos realizados</p>
+                  </div>
+                </button>
+
               </div>
             </div>
 
@@ -390,6 +467,21 @@ onUnmounted(() => {
         <!-- Agendamentos -->
         <div v-else-if="activeSection === 'agendamentos'" class="flex-1 overflow-hidden flex flex-col">
           <AdminAgendamentos />
+        </div>
+
+        <!-- Editor do Site -->
+        <div v-else-if="activeSection === 'editor'" class="flex-1 overflow-hidden flex flex-col">
+          <AdminSiteEditor />
+        </div>
+
+        <!-- Portfólio -->
+        <div v-else-if="activeSection === 'portfolio'" class="flex-1 overflow-hidden flex flex-col">
+          <AdminPortfolio />
+        </div>
+
+        <!-- Notificações -->
+        <div v-else-if="activeSection === 'notificacoes'" class="flex-1 overflow-hidden flex flex-col">
+          <AdminNotificacoes />
         </div>
 
         <!-- Ver Site -->

@@ -10,6 +10,7 @@ export interface GalleryItem {
   show_on_home: boolean
   aspect_ratio: string
   created_at: string
+  data_url?: string
 }
 
 // --- User / Profile ---

@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="text-center mb-10">
         <h2 class="font-headline font-bold text-3xl md:text-4xl text-on-surface mb-3">
-          Nossos Serviços
+          {{ cfg.get('servicos_titulo', 'Nossos Serviços') }}
         </h2>
         <p class="text-on-surface-variant text-base md:text-lg max-w-2xl mx-auto mb-2">
-          Soluções completas em automação, segurança e serralheria para sua propriedade
+          {{ cfg.get('servicos_subtitulo', 'Soluções completas em automação, segurança e serralheria para sua propriedade') }}
         </p>
         <p class="text-on-surface-variant text-sm">
           Escolha o serviço e clique em <span class="font-bold text-on-surface">Pedir orçamento</span> para falar direto no WhatsApp
@@ -99,6 +99,7 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWhatsApp } from '../composables/useWhatsApp'
+import { useSiteConfig } from '../composables/useSiteConfig'
 import CardContainer from './CardContainer.vue'
 import CardBody from './CardBody.vue'
 import CardItem from './CardItem.vue'
@@ -127,9 +128,11 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const { sendMessage } = useWhatsApp()
+    const cfg = useSiteConfig()
     const isMobile = ref(false)
 
     onMounted(() => {
+      cfg.carregar()
       isMobile.value = window.innerWidth < 768
       window.addEventListener('resize', () => {
         isMobile.value = window.innerWidth < 768
@@ -218,7 +221,7 @@ export default defineComponent({
       },
     ]
 
-    return { services, isMobile, handleWhatsApp, handleCardClick }
+    return { services, isMobile, handleWhatsApp, handleCardClick, cfg }
   },
 })
 </script>

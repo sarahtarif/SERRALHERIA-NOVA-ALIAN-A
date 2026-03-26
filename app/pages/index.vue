@@ -1,10 +1,10 @@
 <template>
-  <div id="page-home" class="bg-surface text-on-surface font-body antialiased overflow-x-hidden">
+  <div id="page-home" class="bg-surface text-on-surface font-body antialiased">
 
     <!-- Mobile layout (< lg) -->
     <div class="lg:hidden">
       <NavTop />
-      <main class="relative min-h-screen flex flex-col pt-20 overflow-hidden">
+      <main class="relative min-h-screen flex flex-col pt-20">
         <div class="absolute inset-0 z-0">
           <img
             class="w-full h-full object-cover opacity-40 mix-blend-luminosity"

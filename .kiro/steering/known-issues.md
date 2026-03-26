@@ -1,7 +1,5 @@
----
 inclusion: always
 ---
-
 # Problemas conhecidos e lições aprendidas
 
 ## 1. fsWrite / fsAppend não persistem em arquivos .vue neste projeto

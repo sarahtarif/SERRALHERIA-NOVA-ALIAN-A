@@ -1,8 +1,8 @@
 <template>
-  <section id="service-cta-final" class="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 text-white py-20 px-4">
+  <section id="service-cta-final" class="bg-surface-container py-20 px-4" style="border-top:1px solid rgba(255,255,255,0.06);">
     <div class="max-w-3xl mx-auto text-center space-y-8">
-      <h2 class="text-3xl md:text-4xl font-bold">Pronto para proteger seu portão?</h2>
-      <p class="text-slate-300 text-lg">Atendemos toda a Grande São Paulo com visita técnica gratuita e orçamento sem compromisso.</p>
+      <h2 class="text-3xl md:text-4xl font-bold text-on-surface">Pronto para proteger seu portão?</h2>
+      <p class="text-on-surface-variant text-lg">Atendemos toda a Grande São Paulo com visita técnica gratuita e orçamento sem compromisso.</p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <button

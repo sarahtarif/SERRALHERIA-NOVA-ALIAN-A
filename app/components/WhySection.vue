@@ -3,12 +3,12 @@
     <div class="max-w-7xl mx-auto">
       <!-- Title -->
       <h2 class="font-headline font-bold text-3xl lg:text-4xl text-on-surface text-center mb-4">
-        Por que escolher a Nova Aliança?
+        {{ cfg.get('why_titulo', 'Por que escolher a Nova Aliança?') }}
       </h2>
 
       <!-- Badges -->
       <div class="flex flex-wrap justify-center gap-6 mb-14">
-        <span v-for="badge in badges" :key="badge" class="flex items-center gap-1.5 text-sm text-on-surface-variant">
+        <span v-for="badge in whyBadges" :key="badge" class="flex items-center gap-1.5 text-sm text-on-surface-variant">
           <span class="text-primary material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
           {{ badge }}
         </span>
@@ -34,42 +34,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
+import { useSiteConfig } from '../composables/useSiteConfig'
 
 export default defineComponent({
   name: 'WhySection',
   setup() {
-    const badges = [
-      '+15 anos em São Paulo',
-      'Atendimento em até 24h',
-      'Equipe especializada',
-      'Garantia estendida',
-    ]
+    const cfg = useSiteConfig()
+    onMounted(() => cfg.carregar())
+
+    const defaultBadges = ['+15 anos em São Paulo', 'Atendimento em até 24h', 'Equipe especializada', 'Garantia estendida']
+    const whyBadges = computed(() => cfg.getJson<string[]>('why_badges', defaultBadges))
 
     const items = [
-      {
-        icon: 'verified_user',
-        title: '+15 Anos',
-        description: 'Experiência consolidada no mercado de automação e segurança em São Paulo.',
-      },
-      {
-        icon: 'bolt',
-        title: 'Atendimento Rápido',
-        description: 'Resposta ágil e visita técnica em até 24h para sua comodidade.',
-      },
-      {
-        icon: 'task_alt',
-        title: 'Garantia Estendida',
-        description: 'Peças originais e garantia de serviços para sua total tranquilidade.',
-      },
-      {
-        icon: 'auto_fix_high',
-        title: 'Solução Completa',
-        description: 'Instalação e manutenção completas, cuidamos de tudo para você.',
-      },
+      { icon: 'verified_user', title: '+15 Anos', description: 'Experiência consolidada no mercado de automação e segurança em São Paulo.' },
+      { icon: 'bolt', title: 'Atendimento Rápido', description: 'Resposta ágil e visita técnica em até 24h para sua comodidade.' },
+      { icon: 'task_alt', title: 'Garantia Estendida', description: 'Peças originais e garantia de serviços para sua total tranquilidade.' },
+      { icon: 'auto_fix_high', title: 'Solução Completa', description: 'Instalação e manutenção completas, cuidamos de tudo para você.' },
     ]
 
-    return { badges, items }
+    return { whyBadges, items, cfg }
   },
 })
 </script>

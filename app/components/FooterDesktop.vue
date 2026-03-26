@@ -1,9 +1,9 @@
 <template>
   <footer id="footer-desktop" class="bg-surface-container-lowest w-full border-t border-white/5">
     <div class="flex flex-col md:flex-row justify-between items-center py-8 px-6 max-w-7xl mx-auto font-body text-sm">
-      <div class="text-lg font-bold text-on-surface font-headline mb-4 md:mb-0">Nova Aliança</div>
+      <div class="text-lg font-bold text-on-surface font-headline mb-4 md:mb-0">{{ cfg.get('empresa_nome', 'Nova Aliança') }}</div>
       <div class="text-on-surface-variant order-last md:order-none">
-        © 2024 Nova Aliança. Segurança e Automação de Alto Padrão.
+        © 2024 {{ cfg.get('empresa_nome', 'Nova Aliança') }}. {{ cfg.get('empresa_slogan', 'Segurança e Automação de Alto Padrão') }}.
       </div>
       <div class="flex gap-6 mb-4 md:mb-0">
         <a href="#" class="text-on-surface-variant hover:text-on-surface transition-colors">Privacidade</a>
@@ -15,9 +15,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
+import { useSiteConfig } from '../composables/useSiteConfig'
 
 export default defineComponent({
   name: 'FooterDesktop',
+  setup() {
+    const cfg = useSiteConfig()
+    onMounted(() => cfg.carregar())
+    return { cfg }
+  },
 })
 </script>

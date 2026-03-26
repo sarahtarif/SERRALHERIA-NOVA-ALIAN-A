@@ -47,14 +47,11 @@
           :key="item.id"
           class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden group hover:border-primary/40 transition-colors duration-200"
         >
-          <!-- Mídia -->
-          <div
-            class="relative bg-surface-container-high overflow-hidden"
-            :style="'aspect-ratio: ' + (item.aspect_ratio || '16/9')"
-          >
+          <!-- Mídia — altura fixa, imagem preenche sem vácuo -->
+          <div class="relative bg-surface-container-high overflow-hidden group/media" style="height: 220px;">
             <video
               v-if="isVideo(item.media_type)"
-              :src="'/api/portfolio/' + item.id + '/media'"
+              :src="item.data_url"
               class="w-full h-full object-cover"
               controls
               playsinline
@@ -62,11 +59,21 @@
             />
             <img
               v-else
-              :src="'/api/portfolio/' + item.id + '/media'"
+              :src="item.data_url"
               :alt="item.title"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
             />
+            <!-- Botão tela cheia -->
+            <button
+              class="absolute bottom-2 right-2 w-8 h-8 rounded-lg flex items-center justify-center opacity-0 group-hover/media:opacity-100 transition-opacity"
+              style="background:rgba(0,0,0,0.6); color:#fff;"
+              @click.stop="openLightbox(item)"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+              </svg>
+            </button>
           </div>
 
           <!-- Info -->
@@ -105,11 +112,27 @@
 
     </div>
   </section>
+
+  <MediaLightbox
+    v-if="lightbox"
+    :src="lightbox.src"
+    :media-type="lightbox.mediaType"
+    :title="lightbox.title"
+    :description="lightbox.description"
+    @close="lightbox = null"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import type { GalleryItem } from '~/shared/types/index'
+import type { GalleryItem } from '~/../../shared/types/index'
+import MediaLightbox from './MediaLightbox.vue'
+
+const lightbox = ref<{ src: string; mediaType?: string; title?: string; description?: string } | null>(null)
+
+function openLightbox(item: GalleryItem) {
+  lightbox.value = { src: item.data_url ?? '', mediaType: item.media_type, title: item.title, description: item.description ?? undefined }
+}
 
 const categories = [
   { label: 'Todos', value: 'todos' },

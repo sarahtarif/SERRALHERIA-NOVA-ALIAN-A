@@ -34,28 +34,28 @@
     </div>
 
     <!-- Guarantee card -->
-    <div class="bg-slate-50 rounded-2xl p-6 text-center space-y-3">
-      <svg class="w-10 h-10 text-blue-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+    <div class="bg-surface-container border border-outline-variant rounded-2xl p-6 text-center space-y-3">
+      <svg class="w-10 h-10 text-primary mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         <polyline points="9 12 11 14 15 10"/>
       </svg>
-      <h3 class="font-bold text-slate-800">Nossa Garantia</h3>
-      <p class="text-slate-600 text-sm leading-relaxed">90 dias de garantia em mão de obra + garantia do fabricante nas peças</p>
-      <span class="inline-block bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Serviço certificado</span>
+      <h3 class="font-bold text-on-surface">Nossa Garantia</h3>
+      <p class="text-on-surface-variant text-sm leading-relaxed">90 dias de garantia em mão de obra + garantia do fabricante nas peças</p>
+      <span class="inline-block bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full">Serviço certificado</span>
     </div>
 
     <!-- Related services -->
-    <div class="bg-white border border-slate-100 rounded-2xl p-6 space-y-4">
-      <h3 class="font-bold text-slate-800">Outros Serviços</h3>
+    <div class="bg-surface-container border border-outline-variant rounded-2xl p-6 space-y-4">
+      <h3 class="font-bold text-on-surface">Outros Serviços</h3>
       <ul class="space-y-2">
         <li v-for="related in relatedServices" :key="related.slug">
           <NuxtLink
-            :to="`/servicos/${related.slug}`"
-            class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors group"
+            :to="'/servicos/' + related.slug"
+            class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-high transition-colors group"
           >
             <div class="w-8 h-8 flex-shrink-0" :class="related.themeColor" v-html="related.iconSvg" />
-            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 flex-1">{{ related.title }}</span>
-            <span class="text-slate-400 text-xs">→</span>
+            <span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface flex-1">{{ related.title }}</span>
+            <span class="text-on-surface-variant text-xs">→</span>
           </NuxtLink>
         </li>
       </ul>

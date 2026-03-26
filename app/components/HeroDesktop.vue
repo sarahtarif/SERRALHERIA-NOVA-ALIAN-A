@@ -1,5 +1,5 @@
 <template>
-  <main id="hero-desktop" class="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20">
+  <main id="hero-desktop" class="relative min-h-screen flex flex-col justify-center pt-20">
     <!-- Background -->
     <div class="absolute inset-0 z-0">
       <img
@@ -17,15 +17,13 @@
         <div>
           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label text-xs font-semibold tracking-wide uppercase mb-6">
             <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
-            +15 anos em São Paulo
+            {{ cfg.get('hero_desktop_anos', '+15 anos em São Paulo') }}
           </span>
           <h1 class="font-headline text-5xl lg:text-7xl font-bold tracking-tighter text-on-surface leading-[1.1] mb-6">
-            Automação de Portões em
-            <span class="text-secondary">São Paulo</span>
-            + Segurança Eletrônica
+            {{ cfg.get('hero_desktop_titulo', 'Automação de Portões em São Paulo + Segurança Eletrônica') }}
           </h1>
           <p class="text-on-surface-variant text-lg lg:text-xl max-w-2xl leading-relaxed">
-            Instalação e manutenção com atendimento rápido e solução completa (motor, fotocélula, trava, interfone e câmeras).
+            {{ cfg.get('hero_desktop_subtitulo', 'Instalação e manutenção com atendimento rápido e solução completa (motor, fotocélula, trava, interfone e câmeras).') }}
           </p>
         </div>
 
@@ -38,6 +36,7 @@
           </button>
           <button
             class="border border-outline-variant/30 hover:bg-white/5 text-primary px-8 py-4 rounded-md font-headline font-bold text-lg transition-all"
+            @click="scrollToServices"
           >
             Nossos Serviços
           </button>
@@ -66,20 +65,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import TrustCard from './TrustCard.vue'
+import { useSiteConfig } from '../composables/useSiteConfig'
 
 export default defineComponent({
   name: 'HeroDesktop',
   components: { TrustCard },
   setup() {
+    const cfg = useSiteConfig()
+    onMounted(() => cfg.carregar())
+
+    function scrollToServices(): void {
+      const el = document.getElementById('services-grid')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }
+
     const trustCards = [
       { icon: 'shield', title: 'Anti-Esmagamento', description: 'Sensores inteligentes para proteção total de veículos e pedestres.', accent: 'primary' as const },
       { icon: 'bolt', title: 'Contra Surtos', description: 'Proteção eletrônica avançada contra picos de energia e raios.', accent: 'secondary' as const },
       { icon: 'verified_user', title: 'Garantia', description: 'Equipamentos certificados com garantia estendida de fábrica.', accent: 'primary' as const },
       { icon: 'support_agent', title: 'Suporte 24h', description: 'Atendimento emergencial prioritário para toda Grande SP.', accent: 'secondary' as const },
     ]
-    return { trustCards }
+    return { trustCards, cfg, scrollToServices }
   },
 })
 </script>

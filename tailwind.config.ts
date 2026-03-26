@@ -9,6 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Cores dinâmicas via CSS variables (controladas pelo banco)
+        'brand-primary': 'var(--color-primary)',
+        'brand-secondary': 'var(--color-secondary)',
+        'brand-surface': 'var(--color-surface)',
+        'brand-on-surface': 'var(--color-on-surface)',
+        'brand-whatsapp': 'var(--color-whatsapp)',
+
         // Cores principais do sistema
         'navy': '#1a2332',           // Azul escuro (header/footer)
         'bg-primary': '#f8f9fa',     // Fundo principal claro
@@ -16,19 +23,19 @@ export default {
         'text-primary': '#1f2937',   // Texto principal escuro
         'text-secondary': '#6b7280', // Texto secundário
 
-        // Sistema de cores (tema escuro — padrão original)
-        'primary': '#f5a623',
+        // Sistema de cores — primary/secondary/surface usam CSS variables para troca em runtime
+        'primary': 'rgb(var(--color-primary) / <alpha-value>)',
         'on-primary': '#422c00',
         'primary-container': '#261700',
         'on-primary-container': '#ad7900',
         'primary-fixed': '#ffdeac',
-        'primary-fixed-dim': '#f5a623',
-        'secondary': '#1a2d45',
+        'primary-fixed-dim': 'rgb(var(--color-primary) / <alpha-value>)',
+        'secondary': 'rgb(var(--color-secondary) / <alpha-value>)',
         'on-secondary': '#ffffff',
         'secondary-container': '#114783',
         'on-secondary-container': '#8cb7fa',
-        'surface': '#061423',
-        'surface-dim': '#061423',
+        'surface': 'rgb(var(--color-surface) / <alpha-value>)',
+        'surface-dim': 'rgb(var(--color-surface) / <alpha-value>)',
         'surface-bright': '#2d3a4a',
         'surface-container-lowest': '#020f1e',
         'surface-container-low': '#0f1c2c',
@@ -36,7 +43,7 @@ export default {
         'surface-container-high': '#1e2b3b',
         'surface-container-highest': '#283646',
         'surface-variant': '#283646',
-        'on-surface': '#d6e4f9',
+        'on-surface': 'rgb(var(--color-on-surface) / <alpha-value>)',
         'on-surface-variant': '#c4c6cc',
         'outline': '#8e9196',
         'outline-variant': '#44474c',

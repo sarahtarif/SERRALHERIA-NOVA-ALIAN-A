@@ -7,16 +7,18 @@ export default defineNuxtConfig({
   router: {
     options: {
       middleware: ['auth'],
+      scrollBehaviorType: 'smooth',
     },
   },
   runtimeConfig: {
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
+    supabaseServiceRoleKey: process.env.SUPABASE_SECRET_KEY ?? '',
+    emailUser: process.env.NUXT_EMAIL_USER ?? '',
+    emailPass: process.env.NUXT_EMAIL_PASS ?? '',
     public: {
-      supabaseUrl: '',
-      supabaseAnonKey: '',
-      whatsappNumber: '',
-      companyName: '',
+      supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL ?? '',
+      supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+      whatsappNumber: process.env.NUXT_PUBLIC_WHATSAPP_NUMBER ?? '',
+      companyName: process.env.NUXT_PUBLIC_COMPANY_NAME ?? '',
     },
   },
   app: {

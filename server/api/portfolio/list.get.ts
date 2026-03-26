@@ -7,9 +7,7 @@ export default defineEventHandler(async () => {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-  // Usa RPC para trazer media_data como base64 junto com os metadados
-  const { data, error } = await supabase.rpc('get_portfolio_home')
-
+  const { data, error } = await supabase.rpc('get_portfolio_all')
   if (error) throw createError({ statusCode: 500, message: error.message })
 
   return { data: data ?? [] }

@@ -1,14 +1,12 @@
 <template>
-  <nav id="nav-desktop" class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-2xl shadow-blue-900/20">
+  <nav id="nav-desktop" class="fixed top-0 w-full z-50 backdrop-blur-xl">
     <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-      <NuxtLink to="/">
-        <img src="/images/logo.png" alt="Nova Aliança" class="h-10 w-auto" />
+      <NuxtLink to="/" class="overflow-visible">
+        <img src="/images/logo.png" alt="Nova Aliança" style="height: 96px; width: auto; position: absolute; top: 50%; transform: translateY(calc(-50% + 15px));" />
       </NuxtLink>
       <div class="flex items-center gap-8 font-headline tracking-tight">
         <NuxtLink to="/" class="text-blue-200 border-b-2 border-secondary-container pb-1">Início</NuxtLink>
-        <NuxtLink to="/#gallery-section" class="text-on-surface-variant hover:text-on-surface transition-colors">Serviços</NuxtLink>
         <NuxtLink to="/sobre" class="text-on-surface-variant hover:text-on-surface transition-colors">Sobre</NuxtLink>
-        <NuxtLink to="/trabalhos" class="text-on-surface-variant hover:text-on-surface transition-colors">Portfólio</NuxtLink>
       </div>
       <div class="flex items-center gap-3">
         <NuxtLink

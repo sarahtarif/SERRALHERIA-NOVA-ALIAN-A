@@ -1,0 +1,32 @@
+import { createClient } from '@supabase/supabase-js'
+import { defineEventHandler, getRouterParam, getHeader, createError } from 'h3'
+
+export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
+  const supabaseUrl = config.public.supabaseUrl as string
+  const serviceKey = config.supabaseServiceRoleKey as string
+  const anonKey = config.public.supabaseAnonKey as string
+
+  const authHeader = getHeader(event, 'authorization')
+  const token = authHeader?.replace('Bearer ', '')
+  if (!token) throw createError({ statusCode: 401, message: 'Não autorizado.' })
+
+  const supabaseUser = createClient(supabaseUrl, anonKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: { headers: { Authorization: 'Bearer ' + token } },
+  })
+  const { data: { user }, error: userErr } = await supabaseUser.auth.getUser()
+  if (userErr || !user) throw createError({ statusCode: 401, message: 'Sessão inválida.' })
+
+  const supabase = createClient(supabaseUrl, serviceKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+  const { data: adminRow } = await supabase.from('admins').select('role').eq('id', user.id).maybeSingle()
+  if (!adminRow) throw createError({ statusCode: 403, message: 'Acesso negado.' })
+
+  const id = getRouterParam(event, 'id')
+  const { error } = await supabase.from('portfolio').delete().eq('id', id)
+  if (error) throw createError({ statusCode: 500, message: error.message })
+
+  return { ok: true }
+})
