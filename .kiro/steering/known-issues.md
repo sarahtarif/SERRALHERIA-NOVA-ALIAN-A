@@ -55,3 +55,16 @@ $lines | Where-Object { $_ -match '\$\{' -and $_ -notmatch '`' }
 **Causa:** Composables que chamam `useRouter()` fora do contexto de setup de componente podem criar instâncias separadas do estado, quebrando o singleton esperado.
 
 **Solução:** Buscar o role diretamente no `onMounted` do componente via `supabase.auth.getUser()` + query na tabela `admins`, sem depender de composables de auth compartilhados para dados críticos de permissão.
+
+## 5. Git push vai para `master` mas o Vercel escuta `main`
+
+**Sintoma:** Após `git push origin master`, o GitHub mostra "master had recent pushes" e pede um Pull Request. O Vercel não faz deploy porque a branch padrão do repositório é `main`.
+
+**Causa:** O repositório local tem branch `master` mas o GitHub/Vercel usa `main` como branch padrão.
+
+**Solução obrigatória:** Sempre fazer push com mapeamento explícito para `main`:
+```powershell
+git push origin master:main 2>&1
+```
+
+**Nunca usar apenas** `git push origin master` — isso cria divergência e exige PR manual.

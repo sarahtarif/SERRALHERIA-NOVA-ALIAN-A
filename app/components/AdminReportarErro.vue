@@ -1,22 +1,36 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useSupabase } from '~/composables/useSupabase'
+
+const props = defineProps<{ aba?: string }>()
+const supabase = useSupabase()
 
 const aberto = ref(false)
 const enviando = ref(false)
 const enviado = ref(false)
+const erroEnvio = ref('')
 const mensagem = ref('')
-const abaAtual = defineProps<{ aba?: string }>()
 
 async function enviar() {
   if (!mensagem.value.trim()) return
   enviando.value = true
-  const corpo = 'Aba: ' + (abaAtual.aba ?? 'desconhecida') + '\n\n' + mensagem.value.trim()
-  const mailto = 'mailto:suporte@novaalianca.com.br?subject=' + encodeURIComponent('[Erro no Painel] ' + (abaAtual.aba ?? '')) + '&body=' + encodeURIComponent(corpo)
-  window.open(mailto, '_blank')
-  enviado.value = true
-  enviando.value = false
-  mensagem.value = ''
-  setTimeout(() => { enviado.value = false; aberto.value = false }, 3000)
+  erroEnvio.value = ''
+  try {
+    const { data } = await supabase.auth.getSession()
+    const token = data.session?.access_token ?? ''
+    await $fetch('/api/admin/reportar-erro', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token },
+      body: { aba: props.aba ?? 'desconhecida', mensagem: mensagem.value.trim() },
+    })
+    enviado.value = true
+    mensagem.value = ''
+    setTimeout(() => { enviado.value = false; aberto.value = false }, 3000)
+  } catch (e: unknown) {
+    erroEnvio.value = (e as { data?: { message?: string } })?.data?.message ?? 'Erro ao enviar. Tente novamente.'
+  } finally {
+    enviando.value = false
+  }
 }
 </script>
 
@@ -52,7 +66,7 @@ async function enviar() {
         <button class="text-xs" style="color:#64748b;" @click="aberto = false">✕</button>
       </div>
 
-      <p class="text-xs" style="color:#94a3b8;">Descreva o que aconteceu. Isso abrirá seu cliente de email com as informações preenchidas.</p>
+      <p class="text-xs" style="color:#94a3b8;">Descreva o que aconteceu e enviaremos direto para o suporte.</p>
 
       <textarea
         v-model="mensagem"
@@ -62,6 +76,8 @@ async function enviar() {
         style="background:#0d1526; color:#e2e8f0; border:1px solid rgba(255,255,255,0.08);"
       />
 
+      <p v-if="erroEnvio" class="text-xs" style="color:#f87171;">{{ erroEnvio }}</p>
+
       <div class="flex gap-2">
         <button
           :disabled="enviando || !mensagem.trim()"
@@ -69,7 +85,7 @@ async function enviar() {
           style="background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.25);"
           @click="enviar"
         >
-          {{ enviado ? 'Email aberto!' : enviando ? 'Abrindo...' : 'Enviar por email' }}
+          {{ enviado ? 'Enviado!' : enviando ? 'Enviando...' : 'Enviar relatório' }}
         </button>
         <button
           class="px-4 py-2 rounded-xl text-xs transition-all"
