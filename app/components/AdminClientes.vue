@@ -28,6 +28,55 @@ const confirmandoExclusao = ref<string | null>(null)
 const excluindo = ref(false)
 const erroExclusao = ref('')
 
+// Busca
+const busca = ref('')
+const clientesFiltrados = computed(() => {
+  if (!busca.value.trim()) return clientes.value
+  const q = busca.value.toLowerCase()
+  return clientes.value.filter(c => (c.full_name ?? '').toLowerCase().includes(q) || c.email.toLowerCase().includes(q))
+})
+
+// Adicionar cliente
+const adicionando = ref(false)
+const novoClienteForm = ref({ nome: '', email: '' })
+const novoClienteErro = ref('')
+const novoClienteSucesso = ref('')
+const novoClienteLink = ref('')
+const enviandoConvite = ref(false)
+
+async function adicionarCliente() {
+  novoClienteErro.value = ''
+  novoClienteSucesso.value = ''
+  novoClienteLink.value = ''
+  if (!novoClienteForm.value.nome.trim() || !novoClienteForm.value.email.trim()) {
+    novoClienteErro.value = 'Nome e email são obrigatórios.'
+    return
+  }
+  enviandoConvite.value = true
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token ?? ''
+    const res = await $fetch<{ ok: boolean; link: string; emailEnviado: boolean }>('/api/convites/enviar-email', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token },
+      body: { nome: novoClienteForm.value.nome.trim(), email: novoClienteForm.value.email.trim() },
+    })
+    novoClienteLink.value = res.link
+    novoClienteSucesso.value = res.emailEnviado
+      ? 'Convite enviado para ' + novoClienteForm.value.email + '!'
+      : 'Cadastro criado. Copie o link abaixo e envie manualmente.'
+    novoClienteForm.value = { nome: '', email: '' }
+  } catch (e: unknown) {
+    novoClienteErro.value = (e as { data?: { message?: string } })?.data?.message ?? 'Erro ao enviar convite.'
+  } finally {
+    enviandoConvite.value = false
+  }
+}
+
+function copiarLink() {
+  if (novoClienteLink.value) navigator.clipboard.writeText(novoClienteLink.value)
+}
+
 function abrirEdicao() {
   if (!selected.value) return
   editForm.value = { full_name: selected.value.full_name ?? '', phone: selected.value.phone ?? '', cep: selected.value.cep ?? '', street: selected.value.street ?? '', number: selected.value.number ?? '', complement: selected.value.complement ?? '', neighborhood: selected.value.neighborhood ?? '', city: selected.value.city ?? '', state: selected.value.state ?? '' }
@@ -137,11 +186,11 @@ function hasMedia(s: Solicitacao) { return s.imagens.length > 0 || s.videos.leng
       <svg class="w-6 h-6 text-indigo-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
     </div>
     <div v-else-if="!clientes.length" class="flex-1 flex items-center justify-center">
-      <p class="text-sm text-slate-400">Nenhum cliente cadastrado ainda.</p>
+      <p class="text-sm text-slate-400">{{ busca ? 'Nenhum cliente encontrado.' : 'Nenhum cliente cadastrado ainda.' }}</p>
     </div>
     <div v-else class="flex-1 flex overflow-hidden">
       <div class="overflow-y-auto" :class="selected ? 'hidden md:flex md:flex-col md:w-72 lg:w-80' : 'flex flex-col w-full'" style="border-right:1px solid rgba(255,255,255,0.05);">
-        <button v-for="c in clientes" :key="c.id" class="w-full text-left px-4 py-3.5 transition-colors border-b flex items-center gap-3" :style="selected?.id === c.id ? 'background:rgba(99,102,241,0.12);border-color:rgba(255,255,255,0.04);' : 'background:transparent;border-color:rgba(255,255,255,0.04);'" @click="selectCliente(c)">
+        <button v-for="c in clientesFiltrados" :key="c.id" class="w-full text-left px-4 py-3.5 transition-colors border-b flex items-center gap-3" :style="selected?.id === c.id ? 'background:rgba(99,102,241,0.12);border-color:rgba(255,255,255,0.04);' : 'background:transparent;border-color:rgba(255,255,255,0.04);'" @click="selectCliente(c)">
           <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-white" style="background:linear-gradient(135deg,#6366f1,#818cf8);">{{ initials(c.full_name, c.email) }}</div>
           <div class="flex-1 min-w-0"><p class="text-sm font-medium text-white truncate">{{ c.full_name || '' }}</p><p class="text-xs truncate" style="color:#64748b">{{ c.email }}</p></div>
           <svg class="w-4 h-4 shrink-0" style="color:#334155;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -215,6 +264,65 @@ function hasMedia(s: Solicitacao) { return s.imagens.length > 0 || s.videos.leng
   <Teleport to="body"><Transition name="lb-fade"><div v-if="lightbox" id="admin-clientes-lightbox" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.92);" @click.self="lightbox = null"><button class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.1);color:#e2e8f0;" @click="lightbox = null"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button><img :src="lightbox" class="max-w-full max-h-[90vh] rounded-xl object-contain shadow-2xl" alt="imagem ampliada" /></div></Transition></Teleport>
 
   <AdminReportarErro aba="Clientes" />
+
+  <Teleport to="body">
+    <Transition name="lb-fade">
+      <div v-if="adicionando" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);" @click.self="adicionando = false">
+        <div class="w-full max-w-md rounded-2xl overflow-hidden" style="background:#0d1526;border:1px solid rgba(99,102,241,0.25);">
+          <div class="flex items-center justify-between px-5 py-4" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+            <div>
+              <h3 class="text-base font-semibold text-white">Adicionar Cliente</h3>
+              <p class="text-xs mt-0.5" style="color:#64748b;">O cliente receberá um link para concluir o cadastro</p>
+            </div>
+            <button @click="adicionando = false; novoClienteSucesso = ''; novoClienteLink = ''" style="color:#64748b;">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="px-5 py-4 space-y-3">
+            <div v-if="!novoClienteSucesso">
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Nome completo <span style="color:#f87171;">*</span></label>
+                  <input v-model="novoClienteForm.nome" type="text" placeholder="Ex: João da Silva" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium mb-1.5" style="color:#94a3b8;">Email <span style="color:#f87171;">*</span></label>
+                  <input v-model="novoClienteForm.email" type="email" placeholder="cliente@email.com" class="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.08);" />
+                </div>
+              </div>
+              <div v-if="novoClienteErro" class="mt-3 px-3 py-2.5 rounded-xl text-xs" style="background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2);">{{ novoClienteErro }}</div>
+            </div>
+            <div v-else class="space-y-3">
+              <div class="flex items-start gap-2.5 px-3 py-3 rounded-xl" style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);">
+                <svg class="w-4 h-4 shrink-0 mt-0.5" style="color:#34d399;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <p class="text-xs leading-relaxed" style="color:#6ee7b7;">{{ novoClienteSucesso }}</p>
+              </div>
+              <div v-if="novoClienteLink" class="space-y-1.5">
+                <p class="text-xs" style="color:#64748b;">Link de cadastro:</p>
+                <div class="flex gap-2">
+                  <input :value="novoClienteLink" readonly class="flex-1 px-3 py-2 rounded-xl text-xs outline-none truncate" style="background:#1e293b;color:#94a3b8;border:1px solid rgba(255,255,255,0.07);" />
+                  <button
+                    class="px-3 py-2 rounded-xl text-xs font-medium transition-all"
+                    style="background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.25);"
+                    @click="copiarLink"
+                  >Copiar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="px-5 py-4 flex gap-3" style="border-top:1px solid rgba(255,255,255,0.06);">
+            <button @click="adicionando = false; novoClienteSucesso = ''; novoClienteLink = ''" class="flex-1 py-2.5 rounded-xl text-sm font-medium" style="background:rgba(255,255,255,0.05);color:#64748b;border:1px solid rgba(255,255,255,0.06);">
+              {{ novoClienteSucesso ? 'Fechar' : 'Cancelar' }}
+            </button>
+            <button v-if="!novoClienteSucesso" @click="adicionarCliente" :disabled="enviandoConvite" class="flex-1 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50" style="background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;">
+              {{ enviandoConvite ? 'Enviando...' : 'Enviar convite' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+
 </template>
 
 <style scoped>
