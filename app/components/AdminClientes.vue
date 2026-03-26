@@ -1,6 +1,7 @@
 ﻿<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
+import AdminInfoBox from '~/components/AdminInfoBox.vue'
 
 const supabase = useSupabase()
 const adminRole = ref<string | null>(null)
@@ -114,7 +115,21 @@ function hasMedia(s: Solicitacao) { return s.imagens.length > 0 || s.videos.leng
 </script>
 <template>
   <div id="admin-clientes" class="flex flex-col h-full">
-    <div class="px-4 py-4 border-b border-white/5 flex items-center justify-between shrink-0">
+        <!-- InfoBox Clientes -->
+    <div class="px-4 pt-4">
+      <AdminInfoBox
+        titulo="Como usar: Clientes"
+        :itens="[
+          'Lista todos os clientes cadastrados com conta no sistema (via convite ou registro).',
+          'Clique em um cliente para ver detalhes, editar informações ou excluir o cadastro.',
+          'Para adicionar um novo cliente, use a aba <strong style=&quot;color:#c7d2fe;&quot;>Convites</strong> — envie um link de convite para o email do cliente.',
+          'Clientes excluídos perdem acesso ao painel e todos os dados vinculados são removidos.',
+          'Use a busca para localizar clientes por nome ou email rapidamente.',
+        ]"
+      />
+    </div>
+
+<div class="px-4 py-4 border-b border-white/5 flex items-center justify-between shrink-0">
       <h2 class="text-base font-semibold text-white">Clientes</h2>
       <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-medium">{{ clientes.length }}</span>
     </div>

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
 import { useAdminAuth } from '~/composables/useAdminAuth'
+import AdminInfoBox from '~/components/AdminInfoBox.vue'
 
 type StatusFilter = 'todas' | 'pendente' | 'aprovada' | 'recusada'
 type SolicitacaoStatus = 'pendente' | 'aprovada' | 'recusada'
@@ -156,7 +157,22 @@ function closeLightbox(): void {
 <template>
   <div id="admin-solicitacoes" class="flex flex-col h-full">
 
-    <!-- Título + contador -->
+    
+    <!-- InfoBox Solicitações -->
+    <div class="px-4 pt-4">
+      <AdminInfoBox
+        titulo="Como usar: Solicitações"
+        :itens="[
+          'Solicitações são pedidos de serviço enviados pelos clientes pelo site.',
+          'Use os filtros de status para visualizar: <strong style=&quot;color:#c7d2fe;&quot;>pendente</strong>, <strong style=&quot;color:#c7d2fe;&quot;>aprovada</strong> ou <strong style=&quot;color:#c7d2fe;&quot;>recusada</strong>.',
+          'Clique em uma solicitação para ver os detalhes e alterar o status.',
+          'Ao aprovar uma solicitação, você pode criar um agendamento diretamente a partir dela.',
+          'Novas solicitações aparecem em tempo real — o sino no topo pisca quando chega uma nova.',
+        ]"
+      />
+    </div>
+
+<!-- Título + contador -->
     <div class="px-4 py-4 border-b border-white/5 flex items-center justify-between shrink-0">
       <h2 class="text-base font-semibold text-white">Solicitações</h2>
       <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-medium">

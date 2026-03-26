@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
 import MediaLightbox from './MediaLightbox.vue'
+import AdminInfoBox from '~/components/AdminInfoBox.vue'
 
 const supabase = useSupabase()
 
@@ -322,7 +323,20 @@ onMounted(() => fetchItems())
 <template>
   <div id="admin-portfolio" class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
 
-    <!-- Header -->
+          <!-- InfoBox Portfólio -->
+      <AdminInfoBox
+        titulo="Como usar: Portfólio"
+        cor="green"
+        :itens="[
+          'Faça upload de <strong style=&quot;color:#6ee7b7;&quot;>fotos e vídeos</strong> dos trabalhos realizados para exibir no site.',
+          'Cada item pode ter título, descrição e ser marcado como <strong style=&quot;color:#6ee7b7;&quot;>destaque</strong> para aparecer na página inicial.',
+          'Imagens e vídeos são armazenados no Supabase Storage — acompanhe o uso no widget de armazenamento.',
+          'Clique em qualquer mídia para ampliar. Use o botão de edição para alterar título ou destaque.',
+          'Itens em destaque aparecem na galeria da página inicial do site.',
+        ]"
+      />
+
+<!-- Header -->
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.2);">
         <svg class="w-5 h-5" style="color:#818cf8;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">

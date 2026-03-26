@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
 import { useSiteConfig } from '~/composables/useSiteConfig'
+import AdminInfoBox from '~/components/AdminInfoBox.vue'
 import type { SiteConfigRow } from '~/composables/useSiteConfig'
 
 const supabase = useSupabase()
@@ -78,7 +79,20 @@ function isDirty(chave: string): boolean {
 <template>
   <div id="admin-site-editor" class="flex-1 overflow-y-auto px-4 py-6">
 
-    <!-- Acesso negado -->
+        <!-- InfoBox Editor do Site -->
+    <AdminInfoBox
+      titulo="Como usar: Editor do Site"
+      cor="amber"
+      :itens="[
+        'Esta área é exclusiva para <strong style=&quot;color:#fbbf24;&quot;>Super Admin</strong>. Outros perfis não têm acesso.',
+        'Edite textos, cores, telefone, WhatsApp e outras informações exibidas no site público.',
+        'As alterações são salvas no banco e aplicadas imediatamente — sem necessidade de novo deploy.',
+        'Após salvar, use a aba <strong style=&quot;color:#fbbf24;&quot;>Ver Site</strong> no menu para conferir as mudanças.',
+        'Não altere campos que não conhece — algumas configurações afetam o funcionamento do sistema.',
+      ]"
+    />
+
+<!-- Acesso negado -->
     <div v-if="!loading && !isSuperAdmin" class="max-w-lg mx-auto text-center py-16 space-y-4">
       <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2);">
         <svg class="w-8 h-8" style="color:#ef4444;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">

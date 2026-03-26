@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
 import { useAdminAuth } from '~/composables/useAdminAuth'
+import AdminInfoBox from '~/components/AdminInfoBox.vue'
 
 interface ServicoCatalogo {
   id: string
@@ -273,7 +274,19 @@ onMounted(carregar)
   <div class="flex-1 overflow-y-auto px-4 py-6">
     <div class="max-w-5xl mx-auto space-y-6">
 
-      <!-- Header -->
+            <!-- InfoBox Agendamentos -->
+      <AdminInfoBox
+        titulo="Como usar: Agendamentos"
+        :itens="[
+          'Clique em <strong style=&quot;color:#c7d2fe;&quot;>+ Novo Agendamento</strong> para criar um serviço agendado para um cliente.',
+          'Preencha o título, data, horário, status e vincule a um cliente cadastrado ou avulso.',
+          'Os status disponíveis são: <strong style=&quot;color:#c7d2fe;&quot;>agendado</strong>, <strong style=&quot;color:#c7d2fe;&quot;>em andamento</strong>, <strong style=&quot;color:#c7d2fe;&quot;>concluído</strong> e <strong style=&quot;color:#c7d2fe;&quot;>cancelado</strong>.',
+          'Agendamentos com status <em>agendado</em> ou <em>em andamento</em> são incluídos automaticamente nas notificações de lembrete por email.',
+          'Use os filtros de status e data para localizar agendamentos rapidamente.',
+        ]"
+      />
+
+<!-- Header -->
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-xl font-bold text-white">Agendamentos</h2>
