@@ -177,6 +177,42 @@ onMounted(carregar)
       </div>
     </div>
 
+    <!-- Como funciona -->
+    <div class="rounded-2xl p-4 space-y-3" style="background:rgba(99,102,241,0.06); border:1px solid rgba(99,102,241,0.15);">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 shrink-0" style="color:#818cf8;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p class="text-sm font-semibold" style="color:#a5b4fc;">Como funciona</p>
+      </div>
+      <ul class="space-y-1.5 text-xs leading-relaxed" style="color:#94a3b8;">
+        <li class="flex items-start gap-2">
+          <span style="color:#6366f1;">1.</span>
+          <span>Configure <strong style="color:#c7d2fe;">quantos dias antes</strong> do agendamento você quer ser avisado (ex: 1 dia antes, 2 dias antes).</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color:#6366f1;">2.</span>
+          <span>Defina os <strong style="color:#c7d2fe;">horários do dia</strong> em que os emails serão enviados (ex: 08:00).</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color:#6366f1;">3.</span>
+          <span>Informe o <strong style="color:#c7d2fe;">Gmail e a Senha de App</strong> que será usado para enviar os emails. A Senha de App é gerada nas configurações de segurança do Google — não é a senha normal da conta.</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color:#6366f1;">4.</span>
+          <span>Adicione os <strong style="color:#c7d2fe;">emails dos administradores</strong> que receberão os avisos. Opcionalmente, ative o envio também para o cliente.</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color:#6366f1;">5.</span>
+          <span>O sistema envia automaticamente para <strong style="color:#c7d2fe;">todos os agendamentos</strong> com status <em>agendado</em> ou <em>em andamento</em> que se encaixem nos dias configurados.</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span style="color:#6366f1;">6.</span>
+          <span>Para disparo automático, configure um cron job externo (ex: <strong style="color:#c7d2fe;">cron-job.org</strong>) para chamar o endpoint nos horários definidos. Use o botão <strong style="color:#c7d2fe;">Testar Disparo</strong> para verificar manualmente.</span>
+        </li>
+      </ul>
+    </div>
+
     <div v-if="loading" class="space-y-3 animate-pulse">
       <div v-for="i in 4" :key="i" class="h-16 rounded-xl" style="background:#0d1526;" />
     </div>
