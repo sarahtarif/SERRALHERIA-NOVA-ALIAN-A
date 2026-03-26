@@ -1,5 +1,6 @@
 <template>
-  <section id="gallery-section" class="py-20 bg-surface-container-low">
+  <section id="gallery-section" class="py-20 bg-surface-container-low" aria-label="Nossos Projetos">
+  <div id="projetos" style="position:absolute;margin-top:-80px;pointer-events:none;" aria-hidden="true"/>
     <div class="container mx-auto px-4">
 
       <!-- Cabeçalho -->
