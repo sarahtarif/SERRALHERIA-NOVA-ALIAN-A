@@ -8,14 +8,20 @@ export default defineEventHandler(async (event) => {
   const supabaseUrl = config.public.supabaseUrl as string
 
   const token = getHeader(event, 'authorization')?.replace('Bearer ', '')
-  if (!token) throw createError({ statusCode: 401, message: 'Não autorizado.' })
+  if (!token) {
+    console.warn('[notificacoes/config.get] Requisição sem token de autorização')
+    throw createError({ statusCode: 401, message: 'Não autorizado.' })
+  }
 
   const supabaseUser = createClient(supabaseUrl, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
     global: { headers: { Authorization: 'Bearer ' + token } },
   })
   const { data: { user }, error } = await supabaseUser.auth.getUser()
-  if (error || !user) throw createError({ statusCode: 401, message: 'Sessão inválida.' })
+  if (error || !user) {
+    console.warn('[notificacoes/config.get] Token inválido ou expirado:', error?.message)
+    throw createError({ statusCode: 401, message: 'Sessão inválida.' })
+  }
 
   const supabase = createClient(supabaseUrl, serviceKey, {
     auth: { autoRefreshToken: false, persistSession: false },

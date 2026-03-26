@@ -25,14 +25,23 @@ const novoHorario = ref('09:00')
 const novoDia = ref(1)
 
 async function getToken(): Promise<string> {
-  const { data } = await supabase.auth.getSession()
-  return data.session?.access_token ?? ''
+  // Usa getSession primeiro; se não houver sessão válida, tenta refreshSession
+  const { data: sessionData } = await supabase.auth.getSession()
+  if (sessionData.session?.access_token) return sessionData.session.access_token
+
+  const { data: refreshData } = await supabase.auth.refreshSession()
+  return refreshData.session?.access_token ?? ''
 }
 
 async function carregar() {
   loading.value = true
+  error.value = ''
   try {
     const token = await getToken()
+    if (!token) {
+      error.value = 'Sessão expirada. Faça login novamente.'
+      return
+    }
     const res = await $fetch<{ data: typeof form.value }>('/api/notificacoes/config', {
       headers: { Authorization: 'Bearer ' + token },
     })
@@ -47,6 +56,14 @@ async function carregar() {
         gmail_pass: res.data.gmail_pass ?? '',
       }
     }
+  } catch (e: unknown) {
+    const msg = (e as { data?: { message?: string }; statusCode?: number })
+    if (msg?.statusCode === 401 || (msg?.data?.message ?? '').includes('autorizado') || (msg?.data?.message ?? '').includes('inválida')) {
+      error.value = 'Sessão expirada. Recarregue a página ou faça login novamente.'
+    } else {
+      error.value = msg?.data?.message ?? 'Erro ao carregar configurações.'
+    }
+    console.error('[AdminNotificacoes] carregar:', e)
   } finally {
     loading.value = false
   }
@@ -80,6 +97,10 @@ async function testarDisparo() {
   testing.value = true
   try {
     const token = await getToken()
+    if (!token) {
+      testResult.value = 'Erro: sessão expirada. Faça login novamente.'
+      return
+    }
     const res = await $fetch<{ ok: boolean; enviados?: number; message?: string }>('/api/notificacoes/disparar', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token },
@@ -88,7 +109,13 @@ async function testarDisparo() {
       ? (res.enviados ? res.enviados + ' email(s) enviado(s) com sucesso!' : res.message ?? 'Nenhum agendamento próximo.')
       : (res.message ?? 'Erro no disparo.')
   } catch (e: unknown) {
-    testResult.value = 'Erro: ' + ((e as { data?: { message?: string } })?.data?.message ?? 'falha no envio')
+    const msg = (e as { data?: { message?: string }; statusCode?: number })
+    if (msg?.statusCode === 401) {
+      testResult.value = 'Erro: sessão expirada. Recarregue a página ou faça login novamente.'
+    } else {
+      testResult.value = 'Erro: ' + (msg?.data?.message ?? 'falha no envio')
+    }
+    console.error('[AdminNotificacoes] testarDisparo:', e)
   } finally {
     testing.value = false
   }

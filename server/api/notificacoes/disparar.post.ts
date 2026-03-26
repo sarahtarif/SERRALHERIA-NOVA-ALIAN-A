@@ -9,7 +9,13 @@ export default defineEventHandler(async (event) => {
 
   // Aceita chamada autenticada (admin) ou token interno
   const authHeader = getHeader(event, 'authorization') ?? ''
-  const isInternal = authHeader === 'Bearer internal-job-' + (config.supabaseServiceRoleKey as string).slice(-8)
+  const expectedToken = 'Bearer internal-job-' + (config.supabaseServiceRoleKey as string).slice(-8)
+  const isInternal = authHeader === expectedToken
+
+  if (!authHeader) {
+    console.warn('[notificacoes/disparar] Requisição sem header Authorization')
+    throw createError({ statusCode: 401, message: 'Não autorizado.' })
+  }
 
   if (!isInternal) {
     const anonKey = config.public.supabaseAnonKey as string
@@ -18,7 +24,13 @@ export default defineEventHandler(async (event) => {
       global: { headers: { Authorization: authHeader } },
     })
     const { data: { user }, error } = await supabaseUser.auth.getUser()
-    if (error || !user) throw createError({ statusCode: 401, message: 'Não autorizado.' })
+    if (error || !user) {
+      console.warn('[notificacoes/disparar] Token inválido ou expirado:', error?.message)
+      throw createError({ statusCode: 401, message: 'Não autorizado.' })
+    }
+    console.info('[notificacoes/disparar] Disparo manual por usuário:', user.email)
+  } else {
+    console.info('[notificacoes/disparar] Disparo via cron job interno')
   }
 
   const supabase = createClient(supabaseUrl, serviceKey, {
@@ -33,6 +45,8 @@ export default defineEventHandler(async (event) => {
     .single()
 
   if (!cfg || !cfg.ativo || !cfg.emails_admin?.length || !cfg.gmail_user || !cfg.gmail_pass) {
+    const motivo = !cfg ? 'config não encontrada' : !cfg.ativo ? 'desativado' : !cfg.emails_admin?.length ? 'sem emails_admin' : 'sem credenciais gmail'
+    console.warn('[notificacoes/disparar] Configuração incompleta:', motivo)
     return { ok: false, message: 'Configuração incompleta ou desativada.' }
   }
 
@@ -48,6 +62,7 @@ export default defineEventHandler(async (event) => {
   // Se chamado internamente pelo cron, respeita os horários configurados
   // Se chamado manualmente pelo admin, ignora a verificação de horário
   if (isInternal && !horariosBatendo) {
+    console.info('[notificacoes/disparar] Cron fora do horário configurado. Hora atual:', horaAtual, '| Horários:', (cfg.horarios_envio as string[]).join(', '))
     return { ok: false, message: 'Fora do horário configurado (' + horaAtual + '). Horários: ' + (cfg.horarios_envio as string[]).join(', ') }
   }
 
@@ -93,6 +108,8 @@ export default defineEventHandler(async (event) => {
     auth: { user: cfg.gmail_user, pass: cfg.gmail_pass },
   })
 
+  console.info('[notificacoes/disparar] Iniciando envio para', agendamentosFiltrados.length, 'agendamento(s)')
+
   const formatDate = (d: string) =>
     new Intl.DateTimeFormat('pt-BR').format(new Date(d + 'T00:00:00'))
 
@@ -125,13 +142,18 @@ export default defineEventHandler(async (event) => {
     `
 
     // Envia para admins
-    await transporter.sendMail({
-      from: '"Nova Aliança" <' + cfg.gmail_user + '>',
-      to: (cfg.emails_admin as string[]).join(', '),
-      subject: assunto,
-      html: htmlAdmin,
-    })
-    enviados++
+    try {
+      await transporter.sendMail({
+        from: '"Nova Aliança" <' + cfg.gmail_user + '>',
+        to: (cfg.emails_admin as string[]).join(', '),
+        subject: assunto,
+        html: htmlAdmin,
+      })
+      enviados++
+      console.info('[notificacoes/disparar] Email admin enviado para agendamento:', ag.id, '| Data:', ag.data_servico)
+    } catch (mailErr) {
+      console.error('[notificacoes/disparar] Falha ao enviar email admin para agendamento:', ag.id, mailErr)
+    }
 
     // Envia para cliente se configurado e tiver email
     if (cfg.notificar_cliente && clienteEmail) {
@@ -145,14 +167,20 @@ export default defineEventHandler(async (event) => {
           <p style="color:#888;font-size:12px;">Nova Aliança Serralheria</p>
         </div>
       `
-      await transporter.sendMail({
-        from: '"Nova Aliança" <' + cfg.gmail_user + '>',
-        to: clienteEmail,
-        subject: 'Lembrete: seu agendamento é ' + diasTexto,
-        html: htmlCliente,
-      })
+      try {
+        await transporter.sendMail({
+          from: '"Nova Aliança" <' + cfg.gmail_user + '>',
+          to: clienteEmail,
+          subject: 'Lembrete: seu agendamento é ' + diasTexto,
+          html: htmlCliente,
+        })
+        console.info('[notificacoes/disparar] Email cliente enviado:', clienteEmail)
+      } catch (mailErr) {
+        console.error('[notificacoes/disparar] Falha ao enviar email cliente:', clienteEmail, mailErr)
+      }
     }
   }
 
+  console.info('[notificacoes/disparar] Concluído. Enviados:', enviados, '/ Total filtrado:', agendamentosFiltrados.length)
   return { ok: true, enviados, agendamentos: agendamentosFiltrados.length }
 })
