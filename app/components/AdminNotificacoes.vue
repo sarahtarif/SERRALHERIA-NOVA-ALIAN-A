@@ -86,7 +86,15 @@ async function salvar() {
     saved.value = true
     setTimeout(() => { saved.value = false }, 3000)
   } catch (e: unknown) {
-    error.value = (e as { data?: { message?: string } })?.data?.message ?? 'Erro ao salvar.'
+    const msg = (e as { data?: { message?: string }; statusCode?: number })
+    if (msg?.statusCode === 401) {
+      error.value = 'Sessão expirada. Recarregue a página ou faça login novamente.'
+    } else if (msg?.statusCode === 403) {
+      error.value = 'Sem permissão para salvar. Verifique se sua conta é admin.'
+    } else {
+      error.value = msg?.data?.message ?? 'Erro ao salvar.'
+    }
+    console.error('[AdminNotificacoes] salvar:', e)
   } finally {
     saving.value = false
   }

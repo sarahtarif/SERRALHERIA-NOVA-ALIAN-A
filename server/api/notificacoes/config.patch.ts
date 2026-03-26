@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
 
   const { data: adminRow } = await supabase.from('admins').select('role').eq('id', user.id).maybeSingle()
   if (!adminRow || !['super_admin', 'editor'].includes(adminRow.role)) {
+    console.warn('[notificacoes/config.patch] Acesso negado para user:', user.id, '| role:', adminRow?.role)
     throw createError({ statusCode: 403, message: 'Acesso negado.' })
   }
 
@@ -62,5 +63,6 @@ export default defineEventHandler(async (event) => {
 
   if (errUpdate) throw createError({ statusCode: 500, message: errUpdate.message })
 
+  console.info('[notificacoes/config.patch] Config salva por:', user.email, '| gmail_user:', body.gmail_user, '| emails_admin:', body.emails_admin)
   return { ok: true }
 })
