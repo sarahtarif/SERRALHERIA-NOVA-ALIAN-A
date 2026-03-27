@@ -35,11 +35,7 @@ export function useNavigation() {
   }
 
   function goServicos(): void {
-    if (router.currentRoute.value.path !== '/') {
-      router.push('/').then(() => setTimeout(() => scrollToSection('services-grid'), 200))
-    } else {
-      scrollToSection('services-grid')
-    }
+    router.push('/servicos')
   }
 
   function goOrcamento(): void {
