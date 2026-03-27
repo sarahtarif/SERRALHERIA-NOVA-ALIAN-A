@@ -29,7 +29,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
       ? 'background:rgba(6,20,35,0.95); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.07);'
       : 'background:transparent; backdrop-filter:blur(0px);'"
   >
-    <div class="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
+    <div class="flex justify-between items-center w-full px-6 py-5 max-w-7xl mx-auto">
 
       <!-- Logo -->
       <button @click="goHome" class="focus:outline-none flex-shrink-0">
