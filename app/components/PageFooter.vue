@@ -5,8 +5,8 @@
       {{ cfg.get('empresa_copyright', '© 2024 Automação & Segurança Eletrônica.') }} <br /> Todos os direitos reservados.
     </p>
     <div class="flex justify-center gap-4 mt-6 text-on-surface-variant text-xs">
-      <span>Privacidade</span>
-      <span>Termos</span>
+      <NuxtLink to="/privacidade" class="hover:text-on-surface transition-colors">Privacidade</NuxtLink>
+      <NuxtLink to="/termos" class="hover:text-on-surface transition-colors">Termos</NuxtLink>
       <span>Suporte</span>
     </div>
   </footer>
@@ -14,10 +14,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
+import { NuxtLink } from '#components'
 import { useSiteConfig } from '../composables/useSiteConfig'
 
 export default defineComponent({
   name: 'PageFooter',
+  components: { NuxtLink },
   setup() {
     const cfg = useSiteConfig()
     onMounted(() => cfg.carregar())

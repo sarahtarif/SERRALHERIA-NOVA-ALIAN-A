@@ -8,8 +8,8 @@
         © 2024 {{ cfg.get('empresa_nome', 'Nova Aliança') }}. {{ cfg.get('empresa_slogan', 'Segurança e Automação de Alto Padrão') }}.
       </div>
       <div class="flex gap-6 mb-4 md:mb-0">
-        <a href="#" class="text-on-surface-variant hover:text-on-surface transition-colors">Privacidade</a>
-        <a href="#" class="text-on-surface-variant hover:text-on-surface transition-colors">Termos</a>
+        <NuxtLink to="/privacidade" class="text-on-surface-variant hover:text-on-surface transition-colors">Privacidade</NuxtLink>
+        <NuxtLink to="/termos" class="text-on-surface-variant hover:text-on-surface transition-colors">Termos</NuxtLink>
         <a href="#" class="text-on-surface-variant hover:text-on-surface transition-colors">Contato</a>
       </div>
     </div>
@@ -18,10 +18,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
+import { NuxtLink } from '#components'
 import { useSiteConfig } from '../composables/useSiteConfig'
 
 export default defineComponent({
   name: 'FooterDesktop',
+  components: { NuxtLink },
   setup() {
     const cfg = useSiteConfig()
     onMounted(() => cfg.carregar())
