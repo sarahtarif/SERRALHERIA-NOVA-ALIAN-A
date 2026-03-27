@@ -7,7 +7,7 @@
       <main class="relative min-h-screen flex flex-col pt-20">
         <div class="absolute inset-0 z-0">
           <img
-            class="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+            class="w-full h-full object-cover object-top opacity-40 mix-blend-luminosity"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLd1R2avVx-pwk5TnuMcU_ZtGVY0_6_Zqk-n72r9rqkDF4eKk7vQmgJq9A58YloDo6dgj8mD-znF0ZSLUKd42Rn5CR8p4VQ6-kkfokuh2PRkYRvx-Q9vMzx4xgyk0jytvd6uBl0nz-frSVaHe1JUkpfOGNfGrJeXLfXm_PX6Vs0wZW0qyzMIDM_7QOIxM845XAJj_K7HQ7NuCYFRmk_w3lLxU-uu-GSQI2ZVu_BpEaE9qSSb3dYeP2VGkYe12Ba216SWwWSZ-vAwc"
             alt="Motor de portão automatizado com textura industrial"
           />

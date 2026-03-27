@@ -1,7 +1,7 @@
 <template>
   <section
     id="service-hero"
-    class="relative text-white py-16 px-4 overflow-hidden min-h-[420px]"
+    class="relative text-white py-12 md:py-16 px-4 overflow-hidden min-h-[480px] md:min-h-[420px]"
     :class="service.heroBgImage ? '' : 'bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900'"
   >
     <!-- Imagem de fundo opcional -->
@@ -9,10 +9,12 @@
       <img
         :src="service.heroBgImage"
         :alt="service.title"
-        class="absolute inset-0 w-full h-full object-cover"
+        class="absolute inset-0 w-full h-full object-cover object-center md:object-right"
         :style="service.heroBgPosition ? `object-position: ${service.heroBgPosition}` : ''"
+        loading="eager"
       />
-      <div class="absolute inset-0 bg-slate-900/50" />
+      <!-- Overlay mais forte no mobile para legibilidade -->
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/70 to-slate-900/90 md:bg-slate-900/55" />
     </template>
 
     <div class="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
