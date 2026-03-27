@@ -23,11 +23,7 @@ export function useNavigation() {
   }
 
   function goSobre(): void {
-    if (router.currentRoute.value.path !== '/') {
-      router.push('/sobre')
-    } else {
-      scrollToSection('sobre')
-    }
+    router.push('/sobre')
   }
 
   function goProjetos(): void {
