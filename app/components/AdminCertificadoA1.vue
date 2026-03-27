@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useSupabase } from '~/composables/useSupabase'
-import { useAdminAuth } from '~/composables/useAdminAuth'
 
 const supabase = useSupabase()
-const { adminUser } = useAdminAuth()
 
 const saving = ref(false)
 const loading = ref(true)
@@ -12,7 +10,7 @@ const erro = ref('')
 const sucesso = ref('')
 
 // Estado atual do certificado salvo
-const certSalvo = ref<{ nome: string; validade_informada: string | null } | null>(null)
+const certSalvo = ref<{ nome: string; validade_informada: string | null; atualizado_em: string | null } | null>(null)
 
 // Formulário
 const arquivo = ref<File | null>(null)
@@ -20,28 +18,50 @@ const senha = ref('')
 const validadeInformada = ref('')
 const inputRef = ref<HTMLInputElement | null>(null)
 
+// ID do admin logado — buscado diretamente para evitar problema de hidratação (known-issue #4)
+const adminId = ref<string | null>(null)
+
 function onFileChange(e: Event) {
   const target = e.target as HTMLInputElement
   arquivo.value = target.files?.[0] ?? null
 }
 
 function formatarTamanho(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+  if (bytes < 1024) return bytes + ' B'
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB'
+}
+
+function formatarData(iso: string | null): string {
+  if (!iso) return ''
+  return new Intl.DateTimeFormat('pt-BR').format(new Date(iso))
 }
 
 async function carregar() {
-  if (!adminUser.value) return
-  const { data } = await supabase
-    .from('admins')
-    .select('cert_a1_nome, cert_a1_validade')
-    .eq('id', adminUser.value.id)
-    .maybeSingle()
-  if (data?.cert_a1_nome) {
-    certSalvo.value = { nome: data.cert_a1_nome, validade_informada: data.cert_a1_validade ?? null }
+  loading.value = true
+  try {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { loading.value = false; return }
+    adminId.value = user.id
+
+    const { data } = await supabase
+      .from('admins')
+      .select('cert_a1_nome, cert_a1_validade, cert_a1_atualizado_em')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (data?.cert_a1_nome) {
+      certSalvo.value = {
+        nome: data.cert_a1_nome,
+        validade_informada: data.cert_a1_validade ?? null,
+        atualizado_em: data.cert_a1_atualizado_em ?? null,
+      }
+    } else {
+      certSalvo.value = null
+    }
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 
 async function salvar() {
@@ -50,6 +70,7 @@ async function salvar() {
 
   if (!arquivo.value) { erro.value = 'Selecione o arquivo do certificado (.pfx ou .p12).'; return }
   if (!senha.value) { erro.value = 'Informe a senha do certificado.'; return }
+  if (!adminId.value) { erro.value = 'Sessão inválida. Recarregue a página.'; return }
 
   const ext = arquivo.value.name.split('.').pop()?.toLowerCase()
   if (!['pfx', 'p12'].includes(ext ?? '')) {
@@ -59,18 +80,17 @@ async function salvar() {
 
   saving.value = true
 
-  // Lê o arquivo como base64
   const base64 = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => {
       const result = reader.result as string
-      // Remove o prefixo "data:...;base64,"
       resolve(result.split(',')[1] ?? '')
     }
     reader.onerror = reject
     reader.readAsDataURL(arquivo.value!)
   })
 
+  const agora = new Date().toISOString()
   const { error } = await supabase
     .from('admins')
     .update({
@@ -78,18 +98,22 @@ async function salvar() {
       cert_a1_nome: arquivo.value.name,
       cert_a1_senha: senha.value,
       cert_a1_validade: validadeInformada.value || null,
-      cert_a1_atualizado_em: new Date().toISOString(),
+      cert_a1_atualizado_em: agora,
     })
-    .eq('id', adminUser.value!.id)
+    .eq('id', adminId.value)
 
   saving.value = false
 
   if (error) {
-    erro.value = 'Erro ao salvar certificado. Verifique se as colunas existem na tabela admins.'
+    erro.value = 'Erro ao salvar certificado: ' + error.message
     return
   }
 
-  certSalvo.value = { nome: arquivo.value.name, validade_informada: validadeInformada.value || null }
+  certSalvo.value = {
+    nome: arquivo.value.name,
+    validade_informada: validadeInformada.value || null,
+    atualizado_em: agora,
+  }
   sucesso.value = 'Certificado salvo com sucesso!'
   arquivo.value = null
   senha.value = ''
@@ -98,7 +122,7 @@ async function salvar() {
 }
 
 async function remover() {
-  if (!adminUser.value) return
+  if (!adminId.value) return
   saving.value = true
   await supabase.from('admins').update({
     cert_a1_data: null,
@@ -106,7 +130,7 @@ async function remover() {
     cert_a1_senha: null,
     cert_a1_validade: null,
     cert_a1_atualizado_em: null,
-  }).eq('id', adminUser.value.id)
+  }).eq('id', adminId.value)
   saving.value = false
   certSalvo.value = null
   sucesso.value = 'Certificado removido.'
@@ -130,6 +154,9 @@ onMounted(carregar)
         <p class="text-xs mt-0.5 truncate" style="color:#64748b;">{{ certSalvo.nome }}</p>
         <p v-if="certSalvo.validade_informada" class="text-xs mt-0.5" style="color:#64748b;">
           Validade: {{ certSalvo.validade_informada }}
+        </p>
+        <p v-if="certSalvo.atualizado_em" class="text-xs mt-0.5" style="color:#475569;">
+          Salvo em: {{ formatarData(certSalvo.atualizado_em) }}
         </p>
       </div>
       <button
