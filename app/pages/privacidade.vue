@@ -75,7 +75,7 @@ import WhatsAppFab from '~/components/WhatsAppFab.vue'
               <li>Revogar o consentimento a qualquer momento.</li>
               <li>Solicitar a portabilidade dos seus dados.</li>
             </ul>
-            <p>Para exercer seus direitos, entre em contato pelo WhatsApp <strong class="text-on-surface">(11) 98711-5613</strong> ou pelo e-mail <strong class="text-on-surface">contato@novaalianca.com.br</strong>.</p>
+            <p>Para exercer seus direitos, entre em contato pelo WhatsApp <strong class="text-on-surface">(11) 98711-5613</strong> ou pelo e-mail <strong class="text-on-surface">marcelababreu01@gmail.com</strong>.</p>
           </section>
 
           <section class="space-y-3">
@@ -89,7 +89,7 @@ import WhatsAppFab from '~/components/WhatsAppFab.vue'
             <ul class="list-none space-y-1 pl-2">
               <li>📍 São Paulo — SP</li>
               <li>📞 (11) 98711-5613</li>
-              <li>✉️ contato@novaalianca.com.br</li>
+              <li>✉️ marcelababreu01@gmail.com</li>
             </ul>
           </section>
 

@@ -104,7 +104,7 @@ import WhatsAppFab from '~/components/WhatsAppFab.vue'
             <ul class="list-none space-y-1 pl-2">
               <li>📍 São Paulo — SP</li>
               <li>📞 (11) 98711-5613</li>
-              <li>✉️ contato@novaalianca.com.br</li>
+              <li>✉️ marcelababreu01@gmail.com</li>
             </ul>
           </section>
 
